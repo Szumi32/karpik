@@ -96,7 +96,7 @@ const INTENTS = [
     text: `Na miejscu: plaża 650 m, staw do wędkowania, plac zabaw, boisko i ognisko. W okolicy: ${attractions.slice(0, 4).map((a) => `**${a.name}** (${a.where})`).join(', ')}. Więcej w zakładce [Okolica](/karpik/okolica).`,
   }) },
   { id: 'equipment', re: /wifi|wi-fi|internet|klimatyzac|ogrzewan|kuchni|zmywark|pralk|lodowk|telewiz|tv\b|recznik|posciel/, answer: () => ({
-    text: 'Wszystkie domki mają klimatyzację, ogrzewanie, telewizor, lodówkę, mikrofalówkę, czajnik, naczynia i pościel. Stodoła ma też zmywarkę i pralkę. Dokładne wyposażenie znajdziesz na stronie [każdego domku](/karpik/domki).',
+    text: 'Wszystkie domki mają klimatyzację, ogrzewanie, telewizor, lodówkę, mikrofalówkę, czajnik, naczynia i pościel. Stodoła ma też zmywarkę i pralkę. Dokładne wyposażenie znajdziesz na stronie [każdego domku](/karpik/domki/).',
   }) },
   { id: 'event', re: /wesel|impreza|urodzin|panieck|kawalersk|integrac|firmow|konferenc/, answer: () => ({
     text: `Większe spotkania ustalamy indywidualnie. Napisz, ile osób i jaki termin: [formularz kontaktowy](/karpik/kontakt) albo telefon ${contact()}.`,
@@ -177,7 +177,7 @@ export function answerRules(raw, history = []) {
   }
 
   if (/domk|domek|dom\b|oferta|ile osob|zmiesci|miesci/.test(t)) {
-    return { text: `Mamy cztery domki:\n${allCabins().map(cabinLine).join('\n')}\n\nZobacz [wszystkie domki](/karpik/domki).` };
+    return { text: `Mamy cztery domki:\n${allCabins().map(cabinLine).join('\n')}\n\nZobacz [wszystkie domki](/karpik/domki/).` };
   }
 
   return {
