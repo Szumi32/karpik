@@ -82,6 +82,7 @@ function contactRequest(b) {
 }
 
 function route(method, pathname, q, body) {
+  if (method === 'POST' && /^\/api\/(quote|bookings)$/.test(pathname) && !site.onlineBooking) throw new ApiError(404, 'Rezerwacje online są wyłączone.');
   if (method === 'GET' && pathname === '/api/availability') {
     if (!cabinBySlug(q.cabin)) throw new ApiError(404, 'Nie znamy takiego domku.');
     const err = checkRange(q.from, q.to);

@@ -10,7 +10,7 @@
 
 ## Najważniejsze informacje
 - Zameldowanie od 14:00, wymeldowanie do 10:00.
-- Rezerwacja online z kalendarzem wolnych terminów: https://szumi32.github.io/karpik/rezerwacja. Zaliczka 50% przelewem, bezpłatne anulowanie do 14 dni przed przyjazdem.
+- Wolne terminy (podgląd): https://szumi32.github.io/karpik/terminy. Rezerwację ustalasz telefonicznie lub przez formularz. Zaliczka 50% przelewem, bezpłatne anulowanie do 14 dni przed przyjazdem.
 - Na miejscu: plaża 650 m od domków, staw do wędkowania, plac zabaw, ognisko i grill, bar z domową kuchnią i sklep, bezpłatny parking.
 - Jezioro Białe: 650 m (do plaży pod Lipami), ok. 150 ha (powierzchnia jeziora), ponad 30 m (głębokość, jedno z najgłębszych jezior w okolicy).
 - Dojazd samochodem: Gostynin 11 km (ok. 20 min), Płock 25 km (ok. 35 min), Włocławek 44 km (ok. 50 min), Łódź 109 km (ok. 1 h 35 min), Toruń 110 km (ok. 1 h 40 min), Warszawa 134 km (ok. 2 h 10 min).
@@ -18,7 +18,7 @@
 
 ## Strony
 - [Wszystkie domki z porównaniem cen](https://szumi32.github.io/karpik/domki/)
-- [Rezerwacja i wolne terminy](https://szumi32.github.io/karpik/rezerwacja)
+- [Wolne terminy](https://szumi32.github.io/karpik/terminy)
 - [Bar i sklep](https://szumi32.github.io/karpik/bar)
 - [Okolica i dojazd](https://szumi32.github.io/karpik/okolica)
 - [Kontakt i częste pytania](https://szumi32.github.io/karpik/kontakt)
@@ -29,7 +29,7 @@
 - **Czy jest balia albo jacuzzi?** Tak, przy Stodole jest balia z piecem opalanym drewnem. Korzystanie z niej kosztuje 200 zł za dobę. Pozostałe domki nie mają balii.
 - **Ile kosztuje pobyt w święta i Sylwestra?** W majówkę, Boże Ciało i Boże Narodzenie doba w Stodole kosztuje 600 zł. Sylwestra wyceniamy indywidualnie, dlatego te noce rezerwujesz telefonicznie.
 - **O której jest zameldowanie i wymeldowanie?** Zameldowanie od 14:00, wymeldowanie do 10:00.
-- **Jak wygląda płatność?** Po wysłaniu rezerwacji termin jest zablokowany przez 48 godzin. W tym czasie wpłacasz zaliczkę 50% przelewem, a my potwierdzamy rezerwację. Resztę płacisz na miejscu gotówką, przelewem lub kartą.
+- **Jak wygląda płatność?** Rezerwację ustalasz telefonicznie albo przez formularz kontaktowy. Po ustaleniu terminu wpłacasz zaliczkę 50% przelewem w ciągu 48 godzin, a my potwierdzamy rezerwację. Resztę płacisz na miejscu gotówką, przelewem lub kartą.
 - **Czy mogę anulować rezerwację?** Tak. Do 14 dni przed przyjazdem zwracamy zaliczkę w całości. Przy późniejszej rezygnacji zadzwoń, a postaramy się znaleźć rozwiązanie.
 - **Czy to dobre miejsce dla dzieci?** Bardzo. Teren jest ogrodzony, jest duży plac zabaw, trampolina, piaskownica, boisko do siatkówki i stół do ping-ponga, a w barze cymbergaj i automaty. Na miejscu jest łóżeczko i krzesełko do karmienia.
 - **Czy można przyjechać z psem?** Psa przyjmujemy w Domku Rodzinnym, po wcześniejszym uzgodnieniu. W pozostałych domkach zwierzęta nie mogą przebywać.

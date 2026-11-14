@@ -5,6 +5,7 @@ export const site = {
   name: 'Karpik',
   fullName: 'Gospodarstwo Agroturystyczne „Karpik”',
   short: 'Domki nad Jeziorem Białym',
+  onlineBooking: false, // false: klient widzi tylko podgląd terminów, a rezerwację ustala telefonicznie lub przez formularz
   demo: true, // pokazuje w stopce notę o danych do potwierdzenia; po uzupełnieniu ustaw false
   // Adres strony w internecie. Po kupieniu domeny wpisz ją tutaj, np. 'https://www.karpik.pl'.
   url: 'https://szumi32.github.io/karpik',
@@ -205,7 +206,7 @@ export const faq = [
   { id: 'balia', q: 'Czy jest balia albo jacuzzi?', a: 'Tak, przy Stodole jest balia z piecem opalanym drewnem. Korzystanie z niej kosztuje 200 zł za dobę. Pozostałe domki nie mają balii.' },
   { id: 'swieta', q: 'Ile kosztuje pobyt w święta i Sylwestra?', a: 'W majówkę, Boże Ciało i Boże Narodzenie doba w Stodole kosztuje 600 zł. Sylwestra wyceniamy indywidualnie, dlatego te noce rezerwujesz telefonicznie.' },
   { id: 'doba', q: 'O której jest zameldowanie i wymeldowanie?', a: `Zameldowanie od ${site.checkIn}, wymeldowanie do ${site.checkOut}.` },
-  { id: 'platnosc', q: 'Jak wygląda płatność?', a: `Po wysłaniu rezerwacji termin jest zablokowany przez ${site.holdLabel}. W tym czasie wpłacasz zaliczkę ${site.depositPercent}% przelewem, a my potwierdzamy rezerwację. Resztę płacisz na miejscu ${site.payments}.` },
+  { id: 'platnosc', q: 'Jak wygląda płatność?', a: `Rezerwację ustalasz telefonicznie albo przez formularz kontaktowy. Po ustaleniu terminu wpłacasz zaliczkę ${site.depositPercent}% przelewem w ciągu ${site.holdLabel}, a my potwierdzamy rezerwację. Resztę płacisz na miejscu ${site.payments}.` },
   { id: 'anulowanie', q: 'Czy mogę anulować rezerwację?', a: `Tak. Do ${site.freeCancelDays} dni przed przyjazdem zwracamy zaliczkę w całości. Przy późniejszej rezygnacji zadzwoń, a postaramy się znaleźć rozwiązanie.` },
   { id: 'dzieci', q: 'Czy to dobre miejsce dla dzieci?', a: 'Bardzo. Teren jest ogrodzony, jest duży plac zabaw, trampolina, piaskownica, boisko do siatkówki i stół do ping-ponga, a w barze cymbergaj i automaty. Na miejscu jest łóżeczko i krzesełko do karmienia.' },
   { id: 'pies', q: 'Czy można przyjechać z psem?', a: 'Psa przyjmujemy w Domku Rodzinnym, po wcześniejszym uzgodnieniu. W pozostałych domkach zwierzęta nie mogą przebywać.' },

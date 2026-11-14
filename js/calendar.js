@@ -333,7 +333,7 @@ export class Timeline {
       <div class="tl__scroll" tabindex="0" role="region" aria-label="Dostępność domków w kolejnych dniach">
         <table class="tl__table"><thead><tr><th class="tl__corner" rowspan="2"><span class="sr-only">Domek</span></th>${head1}</tr><tr>${head2}</tr></thead><tbody>${rows}</tbody></table>
       </div>
-      <p class="tl__foot">Kliknij wolny dzień, aby zacząć rezerwację od tej daty.</p>`;
+      <p class="tl__foot">Wolne i zajęte dni wszystkich domków. Rezerwację ustalasz telefonicznie.</p>`;
   }
 
   onClick(e) {
@@ -347,7 +347,6 @@ export class Timeline {
     const cell = e.target.closest('[data-tl-day]');
     if (!cell) return;
     if (this.onPick) this.onPick({ cabin: cell.dataset.tlCabin, day: cell.dataset.tlDay });
-    else location.href = `/karpik/rezerwacja?domek=${cell.dataset.tlCabin}&od=${cell.dataset.tlDay}`;
   }
 }
 

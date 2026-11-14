@@ -1,6 +1,5 @@
-// Strona domku: galeria, kalendarz, wycena na żywo.
-import { $, $$, fmtDateShort, nightsLabel, post, price } from './util.js';
-import { RangeCalendar } from './calendar.js';
+// Strona domku: podgląd zdjęć. Kalendarz jest zwykłym HTML-em z serwera.
+import { $, $$ } from './util.js';
 
 const data = JSON.parse($('#cabin-data').textContent);
 
@@ -60,78 +59,3 @@ function closeLightbox() {
   lastFocus?.focus();
 }
 $$('[data-open-photo]').forEach((b) => b.addEventListener('click', () => openLightbox(Number(b.dataset.openPhoto))));
-
-/* Rezerwacja na karcie */
-const card = $('[data-book-card]');
-const quoteBox = $('[data-bc-quote]');
-const errorBox = $('[data-bc-error]');
-const go = $('[data-bc-go]');
-const mbGo = $('[data-mb-go]');
-const mbPrice = $('[data-mb-price]');
-const mbSub = $('[data-mb-sub]');
-const params = new URLSearchParams(location.search);
-let guests = Math.min(Math.max(1, Number(params.get('goscie')) || Math.min(2, data.maxGuests)), data.maxGuests);
-let stay = { start: params.get('od'), end: params.get('do') };
-let requestId = 0;
-const guestsOut = $('[data-bc-guests]');
-
-const bookHref = () => {
-  const q = new URLSearchParams({ domek: data.slug, od: stay.start, do: stay.end, goscie: guests });
-  return `/karpik/rezerwacja?${q}`;
-};
-
-async function updateQuote() {
-  $('[data-bc-in] b', card).textContent = stay.start ? fmtDateShort(stay.start) : 'Wybierz';
-  $('[data-bc-out] b', card).textContent = stay.end ? fmtDateShort(stay.end) : 'Wybierz';
-  guestsOut.textContent = guests;
-  $('[data-bc-step="-1"]').disabled = guests <= 1;
-  $('[data-bc-step="1"]').disabled = guests >= data.maxGuests;
-  errorBox.hidden = true;
-
-  if (!stay.start || !stay.end) {
-    quoteBox.hidden = true;
-    go.textContent = 'Wybierz daty';
-    go.href = '#kalendarz';
-    mbGo.textContent = 'Sprawdź terminy';
-    mbGo.href = '#kalendarz';
-    return;
-  }
-  const id = ++requestId;
-  try {
-    const q = await post('/api/quote', { cabin: data.slug, checkIn: stay.start, checkOut: stay.end, guests });
-    if (id !== requestId) return;
-    quoteBox.hidden = false;
-    quoteBox.innerHTML = q.lines.map((l) => `<div class="quote-line"><span>${l.id === 'noclegi' ? `${nightsLabel(l.qty)}` : l.label}</span><span>${price(l.amount)}</span></div>`).join('')
-      + `<div class="quote-line is-total"><span>Razem</span><span>${price(q.total)}</span></div>`
-      + `<div class="quote-line is-deposit"><span>Zaliczka</span><span>${price(q.deposit)}</span></div>`;
-    go.textContent = 'Przejdź do rezerwacji';
-    go.href = bookHref();
-    mbPrice.textContent = price(q.total);
-    mbSub.textContent = `razem za ${nightsLabel(q.nights)}`;
-    mbGo.textContent = 'Rezerwuj';
-    mbGo.href = bookHref();
-  } catch (err) {
-    if (id !== requestId) return;
-    quoteBox.hidden = true;
-    errorBox.textContent = err.message;
-    errorBox.hidden = false;
-    go.textContent = 'Wybierz daty';
-    go.href = '#kalendarz';
-  }
-}
-
-const calendar = new RangeCalendar($('[data-calendar]'), {
-  cabin: data.slug,
-  start: stay.start,
-  end: stay.end,
-  onChange: (range) => {
-    stay = range;
-    updateQuote();
-  },
-});
-$$('[data-bc-step]').forEach((b) => b.addEventListener('click', () => {
-  guests = Math.min(data.maxGuests, Math.max(1, guests + Number(b.dataset.bcStep)));
-  updateQuote();
-}));
-updateQuote();
-export { calendar };

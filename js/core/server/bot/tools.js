@@ -9,7 +9,7 @@ export const bookingLink = ({ slug, checkIn, checkOut, guests }) => {
   if (checkIn) q.set('od', checkIn);
   if (checkOut) q.set('do', checkOut);
   if (guests) q.set('goscie', guests);
-  return `/karpik/rezerwacja?${q}`;
+  return slug ? `/karpik/domki/${slug}` : `/karpik/terminy?${q}`;
 };
 
 const card = (cabin, { checkIn, checkOut, guests, total, nights }) => ({

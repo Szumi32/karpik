@@ -23,7 +23,7 @@ function availabilityAnswer(stay, today) {
     }
     if (res.tooShort) {
       return {
-        text: `W tym terminie minimalny pobyt to ${pluralNights(res.minStay)}. W domkach drewnianych zawsze co najmniej 4 noce, a Stodołę poza latem wynajmiesz nawet na jedną noc. [Wybierz daty w kalendarzu](/karpik/rezerwacja).`,
+        text: `W tym terminie minimalny pobyt to ${pluralNights(res.minStay)}. W domkach drewnianych zawsze co najmniej 4 noce, a Stodołę poza latem wynajmiesz nawet na jedną noc. [Sprawdź terminy](/karpik/terminy).`,
         chips: ['Jaki jest najbliższy wolny termin?'],
       };
     }
@@ -41,7 +41,7 @@ function availabilityAnswer(stay, today) {
   }
   if (stay.checkIn) {
     return {
-      text: `Na ile nocy chcesz przyjechać? Napisz na przykład „na 4 noce”. Możesz też [wybrać daty w kalendarzu](/karpik/rezerwacja?od=${stay.checkIn}).`,
+      text: `Na ile nocy chcesz przyjechać? Napisz na przykład „na 4 noce”. Możesz też [sprawdzić terminy](/karpik/terminy?od=${stay.checkIn}).`,
       chips: ['Na 4 noce', 'Na 5 nocy', 'Na tydzień'],
     };
   }
@@ -50,8 +50,8 @@ function availabilityAnswer(stay, today) {
     const year = Number(today.slice(0, 4)) + (stay.month < now ? 1 : 0);
     const list = freeInMonth({ month: stay.month, year }).filter((c) => !stay.guests || c.guests >= stay.guests);
     const lines = list.filter((c) => c.wolne.length).map((c) => `**${c.name}**: ${c.wolne.slice(0, 3).map((r) => r.opis).join(', ')}${c.wolne.length > 3 ? ' i inne' : ''}`);
-    if (!lines.length) return { text: `W ${MONTH_LOC[stay.month]} nie mamy już wolnych terminów. Sprawdź [kalendarz](/karpik/rezerwacja) albo zapytaj o inny miesiąc.` };
-    return { text: `Wolne w ${MONTH_LOC[stay.month]} ${year}:\n${lines.join('\n')}\n\nPodaj daty, a sprawdzę dokładną cenę. Wszystko widać też w [kalendarzu](/karpik/rezerwacja).` };
+    if (!lines.length) return { text: `W ${MONTH_LOC[stay.month]} nie mamy już wolnych terminów. Sprawdź [terminy](/karpik/terminy) albo zapytaj o inny miesiąc.` };
+    return { text: `Wolne w ${MONTH_LOC[stay.month]} ${year}:\n${lines.join('\n')}\n\nPodaj daty, a sprawdzę dokładną cenę. Wszystko widać też w [terminach](/karpik/terminy).` };
   }
   const soon = nextFree({ guests: stay.guests, nights: stay.nights }).slice(0, 3);
   return {
@@ -71,7 +71,7 @@ const INTENTS = [
     text: `Telefon: ${contact()}, e-mail: [${site.email}](mailto:${site.email}). Możesz też napisać przez [formularz kontaktowy](/karpik/kontakt).`,
   }) },
   { id: 'howbook', re: /\b(jak|gdzie)\b.*\b(zarezerw|rezerwac|zamowic)|chce zarezerwowac|chcialbym zarezerwowac|chcialabym zarezerwowac/, answer: () => ({
-    text: `Rezerwacja zajmuje 2 minuty: [wybierz daty i domek](/karpik/rezerwacja), podaj dane i wyślij. Termin blokujemy na ${site.holdLabel}, w tym czasie wpłacasz zaliczkę ${site.depositPercent}%.`,
+    text: `Rezerwację ustalasz telefonicznie albo przez [formularz kontaktowy](/karpik/kontakt). Po ustaleniu terminu wpłacasz zaliczkę ${site.depositPercent}% w ciągu ${site.holdLabel}. Wolne dni sprawdzisz w [terminach](/karpik/terminy).`,
   }) },
   { id: 'dog', re: /\b(pies|psem|psa|psiak|zwierz|kot|kota)\w*/, answer: () => ({ text: faqAnswer('pies'), chips: ['Pokaż Domek Rodzinny'] }) },
   { id: 'holiday', re: /sylwest|swiet|boze cialo|bozego ciala|majowk|wielkanoc/, answer: () => ({ text: faqAnswer('swieta') }) },

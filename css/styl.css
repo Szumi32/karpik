@@ -766,3 +766,39 @@ button.search__field:hover, button.search__field.is-open { background: rgba(127,
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   .js .reveal { opacity: 1; transform: none; }
 }
+
+/* Podgląd terminów (/terminy) i kalendarz miesiąca na stronie domku: zwykły HTML, bez rezerwacji */
+.av-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 16px 0 10px; }
+.av-nav a { min-height: 44px; display: inline-flex; align-items: center; }
+.av-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.av { border-collapse: separate; border-spacing: 4px; width: 100%; min-width: 640px; font-size: .9rem; }
+.av th, .av td { text-align: center; padding: 0; }
+.av thead th { font-weight: 600; font-size: .85rem; }
+.av thead small { display: block; font-weight: 400; color: #5c5c55; font-size: .7rem; }
+.av tbody th { text-align: left; white-space: nowrap; padding-right: 8px; font-weight: 600; }
+.av td span { display: flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 8px; font-size: .72rem; }
+.av__free span { background: #e6f2ea; color: #1d4a2f; }
+.av__busy span { background: #f2e3e1; color: #7a2b22; text-decoration: line-through; }
+.av__ask span { background: #f3ecd9; color: #6b5414; }
+.av__past span { color: #b5b2a8; }
+.av-legend { font-size: .85rem; color: #5c5c55; margin: .75rem 0 0; }
+.av-search h2 { font-size: 1.3rem; }
+.av-list { padding-left: 20px; }
+.av-list li { margin: 6px 0; }
+.av-cta { margin-top: 28px; padding: 18px; background: #f3f1ea; border-radius: 8px; }
+.av-cta p { margin: 0 0 4px; }
+.mc { max-width: 40rem; margin: 8px 0 0; }
+.mc__head { display: grid; grid-template-columns: 2.75rem 1fr 2.75rem; align-items: center; gap: .5rem; }
+.mc__head h3 { margin: 0; font-size: 1.05rem; text-align: center; }
+.mc__head a { display: grid; place-items: center; min-height: 44px; font-size: 1.5rem; text-decoration: none; }
+.mc__grid { list-style: none; margin: .75rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.mc__dow { text-align: center; font-size: .75rem; color: #5c5c55; }
+.mc__day { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 56px; border-radius: 8px; font-variant-numeric: tabular-nums; }
+.mc__num { font-weight: 600; }
+.mc__state { font-size: .62rem; }
+.mc__day.is-free { background: #e6f2ea; color: #1d4a2f; }
+.mc__day.is-busy { background: #f2e3e1; color: #7a2b22; text-decoration: line-through; }
+.mc__day.is-ask { background: #f3ecd9; color: #6b5414; }
+.mc__day.is-past { color: #b5b2a8; }
+.mc__legend { font-size: .85rem; color: #5c5c55; margin: .75rem 0 0; }
+.book-card__text { margin: 0 0 14px; }
