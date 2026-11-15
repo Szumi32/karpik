@@ -164,3 +164,17 @@ export function createBooking({ slug, checkIn, checkOut, guests, extras = [], na
 }
 
 export const bookingByCode = (code) => db.prepare('SELECT * FROM bookings WHERE code = ?').get(code);
+
+// Zwalnia noce [start, end) z blokad właściciela: blok jest skracany albo dzielony. Rezerwacji gości nie rusza.
+export function releaseBlocks(cabin, start, end) {
+  return tx(() => {
+    const rows = db.prepare('SELECT id, start, end, reason FROM blocks WHERE cabin = ? AND start < ? AND end > ?').all(cabin, end, start);
+    const insert = db.prepare('INSERT INTO blocks (cabin, start, end, reason) VALUES (?, ?, ?, ?)');
+    for (const b of rows) {
+      db.prepare('DELETE FROM blocks WHERE id = ?').run(b.id);
+      if (b.start < start) insert.run(cabin, b.start, start, b.reason);
+      if (b.end > end) insert.run(cabin, end, b.end, b.reason);
+    }
+    return rows.length;
+  });
+}

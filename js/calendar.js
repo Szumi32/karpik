@@ -317,7 +317,7 @@ export class Timeline {
           if (!busy.has(addDays(d, 1))) cls.push('is-busy-end');
           return `<td class="tl__cell ${cls.join(' ')}" aria-label="${c.name}, ${fmtDate(d)}: zajęte"></td>`;
         }
-        return `<td class="tl__cell ${cls.join(' ')}"><button type="button" data-tl-day="${d}" data-tl-cabin="${c.slug}" aria-label="${c.name}, ${fmtDate(d)}: wolne, wybierz" title="${c.name}, ${fmtDate(d)}: wolne"></button></td>`;
+        return `<td class="tl__cell ${cls.join(' ')}" aria-label="${c.name}, ${fmtDate(d)}: wolne" title="${c.name}, ${fmtDate(d)}: wolne"></td>`;
       }).join('');
       return `<tr class="tl__row"><th class="tl__name" scope="row"><a href="/karpik/domki/${c.slug}">${c.name}</a><small>do ${c.guests} os.</small></th>${cells}</tr>`;
     }).join('');

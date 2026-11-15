@@ -9,6 +9,8 @@ export const site = {
   demo: true, // pokazuje w stopce notę o danych do potwierdzenia; po uzupełnieniu ustaw false
   // Adres strony w internecie. Po kupieniu domeny wpisz ją tutaj, np. 'https://www.karpik.pl'.
   url: 'https://szumi32.github.io/karpik',
+  // Repozytorium z wersją statyczną. Panel właściciela zapisuje w nim plik data/blocks.json (zajęte terminy).
+  pagesRepo: 'Szumi32/karpik',
   // Opis dla wyszukiwarek i asystentów AI (dane strukturalne, llms.txt).
   about: 'Cztery całoroczne domki do wynajęcia nad Jeziorem Białym w Białem koło Gostynina, 25 km od Płocka: Stodoła z balią dla 9 osób, Domek Rodzinny, Domek Letniskowy i Domek Drewniany. Plaża pod Lipami 650 m, staw do wędkowania, plac zabaw, ognisko oraz bar z domową kuchnią i sklep na miejscu.',
   // Profile gospodarstwa w innych serwisach: wizytówka Google, Facebook, nocowanie.pl, Booking. Pomagają AI połączyć je ze stroną.

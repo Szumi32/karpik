@@ -1,0 +1,56 @@
+/* Panel na telefon: duże pola dotyku, jedna kolumna, przyciski przy kciuku. Dołączany po panel.css. */
+.pm { background: var(--bg); }
+.pm-app { max-width: 34rem; margin: 0 auto; padding: 0 14px calc(220px + env(safe-area-inset-bottom)); }
+.pm-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0 8px; }
+.pm-top h1 { font-size: 1.5rem; }
+.pm-top__links { display: flex; align-items: center; gap: 14px; font-size: .9rem; }
+.pm-top__links a, .pm-top__links button { min-height: 44px; display: inline-flex; align-items: center; padding: 0; background: none; border: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+
+.pm-cabins { display: flex; gap: 8px; overflow-x: auto; padding: 6px 0 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.pm-cabins::-webkit-scrollbar { display: none; }
+.pm-chip { flex: 0 0 auto; min-height: 44px; padding: 0 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font-weight: 500; }
+.pm-chip.is-active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+.pm-month__head { display: grid; grid-template-columns: 52px 1fr 52px; align-items: center; margin: 4px 0 8px; }
+.pm-month__head h2 { margin: 0; text-align: center; font-size: 1.2rem; text-transform: capitalize; }
+.pm-month__head button { min-height: 52px; background: none; border: 0; font-size: 1.8rem; }
+
+.pm-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.pm-dow { text-align: center; font-size: .75rem; color: var(--muted); padding-bottom: 2px; }
+.pm-day { width: 100%; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 2px; border: 2px solid transparent; border-radius: 10px; font-variant-numeric: tabular-nums; touch-action: manipulation; }
+.pm-day b { font-size: 1.05rem; font-weight: 600; }
+.pm-day small { font-size: .58rem; letter-spacing: .02em; line-height: 1.1; }
+.pm-day.is-free { background: #e6f2ea; color: #1d4a2f; }
+.pm-day.is-block { background: #f2d9d5; color: #7a2b22; }
+.pm-day.is-block b { text-decoration: line-through; }
+.pm-day.is-booked { background: #2a2c25; color: #f1efe6; }
+.pm-day.is-past { background: transparent; color: #b5b2a8; }
+.pm-day.is-arrival, .pm-day.is-departure { border-color: var(--accent); }
+.pm-day.is-arrival { background: #f4e1c7; color: #5a3410; }
+.pm-day.is-departure { background: #fbf0dd; color: #5a3410; }
+.pm-day.is-range { background: #f4e1c7; color: #5a3410; }
+
+.pm-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 12px 0 6px; font-size: .85rem; color: var(--muted); }
+.pm-dot { display: inline-block; width: .8rem; height: .8rem; border-radius: 4px; margin-right: 5px; vertical-align: middle; }
+.pm-dot.is-free { background: #e6f2ea; border: 1px solid #1d4a2f; }
+.pm-dot.is-block { background: #f2d9d5; border: 1px solid #7a2b22; }
+.pm-dot.is-booked { background: #2a2c25; }
+.pm-hint { font-size: .85rem; color: var(--muted); }
+
+.pm-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; max-width: 34rem; margin: 0 auto; padding: 18px 16px calc(18px + env(safe-area-inset-bottom)); background: var(--surface); border: 1px solid var(--line); border-bottom: 0; border-radius: 18px 18px 0 0; box-shadow: 0 -10px 30px rgba(13, 14, 11, .18); }
+.pm-sheet__title { margin: 0 0 4px; font-size: 1.05rem; font-weight: 600; }
+.pm-sheet__text { margin: 0 0 12px; color: var(--muted); }
+.pm-note { display: grid; gap: 4px; margin-bottom: 12px; font-size: .9rem; }
+.pm-note input { min-height: 48px; padding: 0 12px; background: #fff; border: 1px solid var(--line); border-radius: 10px; font-size: 1rem; }
+.pm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pm-actions--col { grid-template-columns: 1fr; }
+.pm-btn { min-height: 52px; display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--ink); color: var(--bg); border: 1px solid var(--ink); border-radius: 12px; font-weight: 600; font-size: 1rem; text-decoration: none; text-align: center; }
+.pm-btn--ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+
+.pm-toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30; max-width: calc(100% - 28px); padding: 12px 16px; background: var(--ink); color: var(--bg); border-radius: 12px; font-size: .95rem; text-align: center; }
+.pm-toast[hidden] { display: none; }
+
+@media (min-width: 700px) {
+  .pm-app { padding-top: 12px; }
+  .pm-day { min-height: 64px; }
+}

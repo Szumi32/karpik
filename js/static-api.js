@@ -8,6 +8,22 @@ import {
   calendar, checkRange, isFree, nextFreeStay, nextFreeWeekend, overview, searchStay, validateStay,
 } from './core/server/availability.js';
 import { answerRules } from './core/server/bot/rules.js';
+import { setLive } from './core/server/db.js';
+
+// Zajęte noce zapisuje właściciel w pliku data/blocks.json. Wczytujemy go przy pierwszym zapytaniu i odświeżamy co 20 sekund.
+let pending = null;
+let loadedAt = 0;
+function refresh() {
+  if (pending && Date.now() - loadedAt < 20000) return pending;
+  loadedAt = Date.now();
+  pending = (async () => {
+    try {
+      const res = await fetch(new URL('../data/blocks.json', import.meta.url), { cache: 'no-store' });
+      if (res.ok) setLive((await res.json()).blocks || {});
+    } catch { /* zostają dane z budowania strony */ }
+  })();
+  return pending;
+}
 
 class ApiError extends Error {
   constructor(status, message, extra = {}) {
@@ -163,6 +179,7 @@ function chat(body) {
 const reply = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
 
 export async function fetchLocal(path, options = {}) {
+  await refresh();
   const url = new URL(path, location.href);
   const at = url.pathname.indexOf('/api/');
   const pathname = at >= 0 ? url.pathname.slice(at) : url.pathname;

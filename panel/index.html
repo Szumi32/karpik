@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pl" data-static="1">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0e0b">
+<title>Terminy | Karpik</title>
+<link rel="icon" href="/karpik/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/karpik/css/panel.css">
+<link rel="stylesheet" href="/karpik/css/panel-mobile.css">
+</head>
+<body class="pm">
+<div class="login" data-login hidden>
+  <form class="login__box" data-login-form>
+    <div class="logo"><svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 29 15.5H3Z" fill="currentColor"/><path d="M3 18.5h26L16 31Z" fill="currentColor" opacity=".36"/></svg><span>Karpik</span></div>
+    <h1>Terminy</h1>
+    <label><span>Login</span><input type="text" name="login" autocomplete="username" autocapitalize="none" required></label>
+    <label><span>Hasło</span><input type="password" name="password" autocomplete="current-password" required></label>
+    <p class="err" data-login-error role="alert" hidden></p>
+    <button class="btn" type="submit">Zaloguj się</button>
+  </form>
+</div>
+<div class="login" data-setup hidden>
+  <form class="login__box" data-setup-form>
+    <div class="logo"><svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 29 15.5H3Z" fill="currentColor"/><path d="M3 18.5h26L16 31Z" fill="currentColor" opacity=".36"/></svg><span>Karpik</span></div>
+    <h1>Połącz z GitHubem</h1>
+    <p class="muted">Zapis terminów wymaga tokenu GitHub. Wklejasz go raz, zostaje tylko na tym telefonie. Jak go zrobić: Settings, Developer settings, Fine-grained tokens, repozytorium Szumi32/karpik, uprawnienie Contents: Read and write.</p>
+    <label><span>Token GitHub</span><input type="password" name="token" autocomplete="off" autocapitalize="none" spellcheck="false" required></label>
+    <p class="err" data-setup-error role="alert" hidden></p>
+    <button class="btn" type="submit">Zapisz token</button>
+  </form>
+</div>
+<div class="pm-app" data-app hidden>
+  <header class="pm-top">
+    <h1>Terminy</h1>
+    <div class="pm-top__links"><button type="button" data-forget>Usuń token</button><button type="button" data-logout>Wyloguj</button></div>
+  </header>
+  <nav class="pm-cabins" data-cabins aria-label="Domek"></nav>
+  <section class="pm-month" aria-labelledby="pm-title">
+    <div class="pm-month__head">
+      <button type="button" data-prev aria-label="Poprzedni miesiąc">‹</button>
+      <h2 id="pm-title" data-title></h2>
+      <button type="button" data-next aria-label="Następny miesiąc">›</button>
+    </div>
+    <ol class="pm-grid" data-grid></ol>
+    <p class="pm-legend"><span class="pm-dot is-free"></span>wolne <span class="pm-dot is-block"></span>zajęte</p>
+    <p class="pm-hint">Dotknij dnia przyjazdu, potem dnia wyjazdu. Zajęte są noce od przyjazdu do dnia przed wyjazdem. Zajęte dni pojawią się na stronie głównej jako niedostępne.</p>
+  </section>
+  <div class="pm-sheet" data-sheet hidden role="dialog" aria-live="polite" aria-label="Wybrany termin"></div>
+</div>
+<div class="pm-toast" data-toast role="status" hidden></div>
+<script type="application/json" id="panel-config">{"repo":"Szumi32/karpik","branch":"main","path":"data/blocks.json","login":"karpik2026","salt":"df1d2fcd865a6f7d45a7c00c3c6e7762","iterations":210000,"hash":"a47476322a23b3b20d8b549ab67cd64c986c0cfad9d8314b0ad2a5c2c3d33a4b","cabins":[{"slug":"stodola","name":"Stodoła"},{"slug":"rodzinny","name":"Domek Rodzinny"},{"slug":"letniskowy","name":"Domek Letniskowy"},{"slug":"drewniany","name":"Domek Drewniany"}]}</script>
+<script type="module" src="/karpik/js/panel-static.js"></script>
+</body>
+</html>
