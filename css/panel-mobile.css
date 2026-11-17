@@ -54,3 +54,7 @@
   .pm-app { padding-top: 12px; }
   .pm-day { min-height: 64px; }
 }
+
+.pm-day.is-pend-add { background: #f4e1c7; color: #5a3410; border-color: var(--accent); }
+.pm-day.is-pend-free { background: #e6f2ea; color: #1d4a2f; border: 2px dashed #7a2b22; }
+.pm-dot.is-pend { background: #f4e1c7; border: 1px solid var(--accent); }

@@ -83,6 +83,13 @@ startPanel({
       })),
     };
   }),
+  // Wszystkie zaznaczone noce zapisują się jedną zmianą pliku, czyli jednym commitem.
+  apply: guard(({ cabin, add, remove }) => store.update((blocks) => {
+    let list = blocks[cabin] || [];
+    for (const [start, end] of remove) list = releaseRange(list, start, end);
+    for (const [start, end] of add) list = addBlock(list, start, end);
+    return { ...blocks, [cabin]: list };
+  }, `Terminy: ${cabin}, zajęte ${add.length}, zwolnione ${remove.length}`)),
   block: guard(({ cabin, start, end }) => store.update((blocks) => ({ ...blocks, [cabin]: addBlock(blocks[cabin] || [], start, end) }), `Zajęte: ${cabin} ${start} – ${end}`)),
   release: guard(({ cabin, start, end }) => store.update((blocks) => ({ ...blocks, [cabin]: releaseRange(blocks[cabin] || [], start, end) }), `Zwolnione: ${cabin} ${start} – ${end}`)),
 });

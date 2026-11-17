@@ -40,6 +40,17 @@ export function releaseRange(ranges, start, end) {
   return normalize(out);
 }
 
+// Zamienia listę dni (noc zaczynająca się danego dnia) na przedziały [przyjazd, wyjazd): kolejne dni łączą się w jeden przedział.
+export function groupDays(dates) {
+  const out = [];
+  for (const d of [...new Set(dates)].filter(isIso).sort()) {
+    const last = out.at(-1);
+    if (last && last[1] === d) last[1] = addDays(d, 1);
+    else out.push([d, addDays(d, 1)]);
+  }
+  return out;
+}
+
 // Zbiór zajętych nocy w przedziale [from, to).
 export function busyNights(ranges, from, to) {
   const set = new Set();

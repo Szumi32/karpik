@@ -1,5 +1,8 @@
-// Panel na telefon: zajmowanie i zwalnianie nocy dotknięciem. Interfejs jest wspólny, a dane dostarcza „backend”:
+// Panel na telefon: dotknięcie dnia zaznacza noc jako zajętą (albo zwalnia już zajętą). Można zaznaczyć dowolnie wiele
+// nocy naraz, także w różnych miesiącach, i zapisać jednym przyciskiem. Interfejs jest wspólny, a dane dostarcza „backend”:
 // panel-mobile.js (serwer Node) albo panel-static.js (GitHub Pages i plik w repozytorium).
+import { groupDays } from './blocks.js';
+
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -26,7 +29,8 @@ export function startPanel(backend) {
   const toastBox = $('[data-toast]');
   const notes = backend.supportsNotes !== false;
   let toastTimer = 0;
-  const state = { cabins: [], cabin: null, month: null, today: null, byNight: new Map(), pick: null };
+  // pending: dzień -> 'add' (zajmij) albo 'remove' (zwolnij). info: otwarte okno z rezerwacją gościa.
+  const state = { cabins: [], cabin: null, month: null, today: null, byNight: new Map(), pending: new Map(), info: null, note: '' };
 
   function toast(text) {
     toastBox.textContent = text;
@@ -81,99 +85,92 @@ export function startPanel(backend) {
     for (let d = 1; d <= days; d++) {
       const iso = `${state.month}-${String(d).padStart(2, '0')}`;
       const info = state.byNight.get(iso);
+      const pend = state.pending.get(iso);
       let cls = 'is-free';
       let label = 'wolne';
       let spoken = 'wolne';
-      if (info?.type === 'block') { cls = 'is-block'; label = 'zajęte'; spoken = label; }
+      if (pend === 'add') { cls = 'is-pend-add'; label = 'zajmij'; spoken = 'do zajęcia'; }
+      else if (pend === 'remove') { cls = 'is-pend-free'; label = 'zwolnij'; spoken = 'do zwolnienia'; }
+      else if (info?.type === 'block') { cls = 'is-block'; label = 'zajęte'; spoken = label; }
       else if (info?.type === 'booked') { cls = 'is-booked'; label = 'rez.'; spoken = 'rezerwacja'; }
       else if (iso < state.today) { cls = 'is-past'; label = ''; spoken = ''; }
-      const p = state.pick;
-      if (p?.start === iso) cls += ' is-arrival';
-      if (p?.end === iso) cls += ' is-departure';
-      if (p?.end && iso > p.start && iso < p.end) cls += ' is-range';
       cells.push(`<li><button type="button" class="pm-day ${cls}" data-date="${iso}" aria-label="${longDate(iso)}${spoken ? ', ' + spoken : ''}"><b>${d}</b><small>${label}</small></button></li>`);
     }
     grid.innerHTML = cells.join('');
     renderSheet();
   }
 
-  function closeSheet() {
-    state.pick = null;
-    sheet.hidden = true;
-    sheet.innerHTML = '';
-    render();
-  }
-  function openInfo(html) {
-    sheet.hidden = false;
-    sheet.innerHTML = html;
-  }
+  const counts = () => {
+    let add = 0;
+    let remove = 0;
+    for (const v of state.pending.values()) if (v === 'add') add++; else remove++;
+    return { add, remove };
+  };
 
+  // Dolny panel: podsumowanie niezapisanych zmian albo informacja o rezerwacji gościa.
   function renderSheet() {
-    const p = state.pick;
-    if (!p) return;
-    if (!p.end) {
-      openInfo(`<p class="pm-sheet__title">Przyjazd ${longDate(p.start)}</p>
-        <p class="pm-sheet__text">Dotknij dnia wyjazdu albo zajmij tylko tę jedną noc.</p>
-        <div class="pm-actions"><button type="button" class="pm-btn" data-act="one">Zajmij 1 noc</button><button type="button" class="pm-btn pm-btn--ghost" data-act="cancel">Anuluj</button></div>`);
+    if (state.pending.size) {
+      const { add, remove } = counts();
+      state.note = $('[data-note]', sheet)?.value ?? state.note;
+      const parts = [add ? `Zajmij: ${nights(add)}` : '', remove ? `Zwolnij: ${nights(remove)}` : ''].filter(Boolean).join('. ');
+      sheet.hidden = false;
+      sheet.innerHTML = `<p class="pm-sheet__title">Niezapisane zmiany</p>
+        <p class="pm-sheet__text">${parts}. Dotknij dnia jeszcze raz, żeby cofnąć.</p>
+        ${notes && add ? `<label class="pm-note"><span>Notatka (opcjonalnie)</span><input type="text" data-note maxlength="200" placeholder="np. Kowalscy, telefon" value="${esc(state.note)}"></label>` : ''}
+        <div class="pm-actions"><button type="button" class="pm-btn" data-act="save">Zapisz</button><button type="button" class="pm-btn pm-btn--ghost" data-act="cancel">Anuluj</button></div>`;
       return;
     }
-    const n = diffDays(p.start, p.end);
-    openInfo(`<p class="pm-sheet__title">Przyjazd ${longDate(p.start)}, wyjazd ${longDate(p.end)}</p>
-      <p class="pm-sheet__text">${nights(n)} do zajęcia.</p>
-      ${notes ? '<label class="pm-note"><span>Notatka (opcjonalnie)</span><input type="text" data-note maxlength="200" placeholder="np. Kowalscy, telefon"></label>' : ''}
-      <div class="pm-actions"><button type="button" class="pm-btn" data-act="save">Zajmij ${nights(n)}</button><button type="button" class="pm-btn pm-btn--ghost" data-act="cancel">Anuluj</button></div>`);
+    if (state.info) {
+      const b = state.info;
+      sheet.hidden = false;
+      sheet.innerHTML = `<p class="pm-sheet__title">Rezerwacja ${esc(b.code)}</p>
+        <p class="pm-sheet__text">${esc(b.name)}, ${longDate(b.checkIn)} – ${longDate(b.checkOut)} (${nights(b.nights)}).<br>${b.phone ? `<a href="tel:${esc(b.phone)}">${esc(b.phone)}</a>` : ''}</p>
+        <p class="pm-sheet__text">Rezerwacją zajmujesz się w pełnym panelu.</p>
+        <div class="pm-actions"><a class="pm-btn" href="/panel">Pełny panel</a><button type="button" class="pm-btn pm-btn--ghost" data-act="cancel">Zamknij</button></div>`;
+      return;
+    }
+    sheet.hidden = true;
+    sheet.innerHTML = '';
   }
 
-  const rangeIsFree = (start, end) => {
-    for (let d = start; d < end; d = addDays(d, 1)) if (state.byNight.has(d)) return false;
-    return true;
-  };
+  function clearSelection() {
+    state.pending.clear();
+    state.info = null;
+    state.note = '';
+    render();
+  }
 
   function onDay(iso) {
     const info = state.byNight.get(iso);
-    const p = state.pick;
-    // Drugie dotknięcie po dniu przyjazdu ustawia wyjazd, także na dniu, w którym zaczyna się kolejny termin.
-    if (p && !p.end && iso > p.start && rangeIsFree(p.start, iso)) {
-      state.pick = { start: p.start, end: iso };
-      render();
-      return;
-    }
-    if (info?.type === 'block') {
-      const b = info.block;
-      state.pick = null;
-      openInfo(`<p class="pm-sheet__title">Zajęte ${longDate(b.start)}, wyjazd ${longDate(b.end)}</p>
-        ${b.reason ? `<p class="pm-sheet__text">${esc(b.reason)}</p>` : ''}
-        <div class="pm-actions pm-actions--col">
-          <button type="button" class="pm-btn" data-act="free-day" data-date="${iso}">Zwolnij ${longDate(iso)}</button>
-          <button type="button" class="pm-btn pm-btn--ghost" data-act="free-block" data-start="${b.start}" data-end="${b.end}">Zwolnij cały termin (${nights(diffDays(b.start, b.end))})</button>
-          <button type="button" class="pm-btn pm-btn--ghost" data-act="cancel">Zamknij</button>
-        </div>`);
-      render();
-      return;
-    }
     if (info?.type === 'booked') {
-      const b = info.booking;
-      state.pick = null;
-      openInfo(`<p class="pm-sheet__title">Rezerwacja ${esc(b.code)}</p>
-        <p class="pm-sheet__text">${esc(b.name)}, ${longDate(b.checkIn)} – ${longDate(b.checkOut)} (${nights(b.nights)}).<br>${b.phone ? `<a href="tel:${esc(b.phone)}">${esc(b.phone)}</a>` : ''}</p>
-        <p class="pm-sheet__text">Rezerwacją zajmujesz się w pełnym panelu.</p>
-        <div class="pm-actions"><a class="pm-btn" href="/panel">Pełny panel</a><button type="button" class="pm-btn pm-btn--ghost" data-act="cancel">Zamknij</button></div>`);
+      if (state.pending.size) { toast('To rezerwacja ze strony. Zmienisz ją w pełnym panelu.'); return; }
+      state.info = info.booking;
       render();
       return;
     }
     if (iso < state.today) { toast('Ten dzień już minął.'); return; }
-    state.pick = { start: iso, end: null };
+    state.info = null;
+    if (state.pending.has(iso)) state.pending.delete(iso);
+    else state.pending.set(iso, info?.type === 'block' ? 'remove' : 'add');
     render();
   }
 
-  async function mutate(action) {
+  async function save() {
+    const cabin = state.cabin;
+    const pick = (kind) => groupDays([...state.pending].filter(([, v]) => v === kind).map(([d]) => d));
+    const args = { cabin, add: pick('add'), remove: pick('remove'), reason: $('[data-note]', sheet)?.value.trim() || '' };
     sheet.querySelectorAll('button').forEach((b) => { b.disabled = true; });
     try {
-      await action();
-      state.pick = null;
-      sheet.hidden = true;
+      if (backend.apply) {
+        await backend.apply(args);
+      } else {
+        for (const [start, end] of args.remove) await backend.release({ cabin, start, end });
+        for (const [start, end] of args.add) await backend.block({ cabin, start, end, reason: args.reason });
+      }
+      state.pending.clear();
+      state.note = '';
       await load();
-      if (backend.afterSave) toast(backend.afterSave);
+      toast(backend.afterSave || 'Zapisane.');
     } catch (err) {
       sheet.querySelectorAll('button').forEach((b) => { b.disabled = false; });
       fail(err);
@@ -183,13 +180,8 @@ export function startPanel(backend) {
   sheet.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-act]');
     if (!btn) return;
-    const { act } = btn.dataset;
-    const cabin = state.cabin;
-    if (act === 'cancel') closeSheet();
-    if (act === 'one') mutate(() => backend.block({ cabin, start: state.pick.start, end: addDays(state.pick.start, 1), reason: '' }));
-    if (act === 'save') mutate(() => backend.block({ cabin, start: state.pick.start, end: state.pick.end, reason: $('[data-note]', sheet)?.value.trim() || '' }));
-    if (act === 'free-day') mutate(() => backend.release({ cabin, start: btn.dataset.date, end: addDays(btn.dataset.date, 1) }));
-    if (act === 'free-block') mutate(() => backend.release({ cabin, start: btn.dataset.start, end: btn.dataset.end }));
+    if (btn.dataset.act === 'cancel') clearSelection();
+    if (btn.dataset.act === 'save') save();
   });
   grid.addEventListener('click', (e) => {
     const day = e.target.closest('[data-date]');
@@ -197,14 +189,17 @@ export function startPanel(backend) {
   });
   $('[data-cabins]').addEventListener('click', (e) => {
     const chip = e.target.closest('[data-cabin]');
-    if (!chip) return;
+    if (!chip || chip.dataset.cabin === state.cabin) return;
+    if (state.pending.size) toast('Niezapisane zmiany poprzedniego domku zostały odrzucone.');
     state.cabin = chip.dataset.cabin;
     remember(state.cabin);
-    closeSheet();
+    state.pending.clear();
+    state.info = null;
+    state.note = '';
     reload();
   });
-  $('[data-prev]').addEventListener('click', () => { state.month = shiftMonth(state.month, -1); state.pick = null; sheet.hidden = true; reload(); });
-  $('[data-next]').addEventListener('click', () => { state.month = shiftMonth(state.month, 1); state.pick = null; sheet.hidden = true; reload(); });
+  $('[data-prev]').addEventListener('click', () => { state.month = shiftMonth(state.month, -1); state.info = null; reload(); });
+  $('[data-next]').addEventListener('click', () => { state.month = shiftMonth(state.month, 1); state.info = null; reload(); });
   $('[data-logout]').addEventListener('click', async () => {
     await backend.logout().catch(() => {});
     show('login');
