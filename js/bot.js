@@ -4,7 +4,7 @@ import { $, esc, fmtRange, nightsLabel, price, request } from './util.js';
 const STORE = 'karpik-bot';
 const START_CHIPS = ['Co jest wolne w lipcu?', 'Ile kosztuje domek dla 4 osób?', 'Czy jest balia?', 'Jaki jest minimalny pobyt?'];
 const ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6c-.5.4-1.3.1-1.3-.6V16A2.5 2.5 0 0 1 4 13.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
-const MARK = '<svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 29 15.5H3Z" fill="currentColor"/><path d="M3 18.5h26L16 31Z" fill="currentColor" opacity=".36"/></svg>';
+const MARK = '<svg class="logo__mark" viewBox="0 0 32 32" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="currentColor" stroke-width="2.4"><path d="M4.5 14.6 16 3.4l11.5 11.2"/><path d="M7.7 11.9v6.4M24.3 11.9v6.4"/></g><g style="stroke:var(--accent)" stroke-width="2.2"><path d="M3.5 23.4q3.1-2.4 6.2 0t6.2 0 6.2 0 6.2 0"/><path d="M8 29.4q3.1-2.4 6.2 0t6.2 0 6.2 0"/></g></svg>';
 
 // Bezpieczne formatowanie: najpierw uciekamy wszystko, potem dopuszczamy pogrubienie i bezpieczne linki.
 function formatText(text) {
@@ -32,8 +32,8 @@ export function initBot(root) {
 
   root.innerHTML = `
     <button type="button" class="bot-fab" data-fab aria-haspopup="dialog">${ICON}<span>Zapytaj asystenta</span></button>
-    <section class="bot" data-panel role="dialog" aria-label="Asystent gospodarstwa Karpik" hidden>
-      <header class="bot__head">${MARK}<div><b>Asystent Karpika</b><small><span class="dot"></span>Odpowiada od razu</small></div>
+    <section class="bot" data-panel role="dialog" aria-label="Asystent Domków nad Białym" hidden>
+      <header class="bot__head">${MARK}<div><b>Asystent</b><small><span class="dot"></span>Odpowiada od razu</small></div>
         <button type="button" class="bot__close" data-close aria-label="Zamknij asystenta"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
       </header>
       <div class="bot__log" data-log aria-live="polite"></div>
@@ -100,7 +100,7 @@ export function initBot(root) {
 
   function renderAll() {
     log.innerHTML = '';
-    bubble('assistant', 'Dzień dobry! Jestem asystentem gospodarstwa Karpik. Sprawdzę wolne terminy, policzę cenę pobytu i odpowiem na pytania o domki, balię, bar i okolicę.');
+    bubble('assistant', 'Dzień dobry! Jestem asystentem Domków nad Białym. Sprawdzę wolne terminy, policzę cenę pobytu i odpowiem na pytania o domki, balię, urodziny i okolicę.');
     let assistantIndex = 0;
     history.forEach((m) => {
       bubble(m.role, m.content);

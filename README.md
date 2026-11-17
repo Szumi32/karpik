@@ -1,6 +1,6 @@
-# Karpik: domki nad Jeziorem Białym
+# Domki nad Białym
 
-Pokazowa, statyczna wersja strony gospodarstwa agroturystycznego Karpik: https://szumi32.github.io/karpik/
+Pokazowa, statyczna wersja strony Domków nad Białym, domków do wynajęcia nad Jeziorem Białym: https://szumi32.github.io/karpik/
 
 Strona działa bez serwera. Podstrony, galerie, kalendarz wolnych terminów z cenami i asystent odpowiadający z bazy wiedzy działają w przeglądarce. Rezerwację ustala się telefonicznie lub przez formularz.
 

@@ -2,9 +2,9 @@
 // i z opisu obiektu na nocowanie.pl. Rzeczy niepewne są wypisane w DO-UZUPELNIENIA.md.
 
 export const site = {
-  name: 'Karpik',
-  fullName: 'Gospodarstwo Agroturystyczne „Karpik”',
-  short: 'Domki nad Jeziorem Białym',
+  name: 'Domki nad Białym',
+  fullName: 'Domki nad Białym',
+  short: 'Domki do wynajęcia nad Jeziorem Białym',
   onlineBooking: false, // false: klient widzi tylko podgląd terminów, a rezerwację ustala telefonicznie lub przez formularz
   demo: true, // pokazuje w stopce notę o danych do potwierdzenia; po uzupełnieniu ustaw false
   // Adres strony w internecie. Po kupieniu domeny wpisz ją tutaj, np. 'https://www.karpik.pl'.
@@ -12,12 +12,12 @@ export const site = {
   // Repozytorium z wersją statyczną. Panel właściciela zapisuje w nim plik data/blocks.json (zajęte terminy).
   pagesRepo: 'Szumi32/karpik',
   // Opis dla wyszukiwarek i asystentów AI (dane strukturalne, llms.txt).
-  about: 'Cztery całoroczne domki do wynajęcia nad Jeziorem Białym w Białem koło Gostynina, 25 km od Płocka: Stodoła z balią dla 9 osób, Domek Rodzinny, Domek Letniskowy i Domek Drewniany. Plaża pod Lipami 650 m, staw do wędkowania, plac zabaw, ognisko oraz bar z domową kuchnią i sklep na miejscu.',
+  about: 'Cztery całoroczne domki do wynajęcia nad Jeziorem Białym w Białem koło Gostynina, 25 km od Płocka: Stodoła z balią dla 9 osób, Domek Rodzinny, Domek Letniskowy i Domek Drewniany. Domki stoją bezpośrednio obok zieleni i łąk, w ciszy, ze sporymi odległościami między sobą, co daje prywatność. Na miejscu jest staw do wędkowania i duży plac zabaw, a wkrótce także małpi gaj.',
   // Profile gospodarstwa w innych serwisach: wizytówka Google, Facebook, nocowanie.pl, Booking. Pomagają AI połączyć je ze stroną.
   sameAs: [],
   address: 'Białe 22a, 09-500 Gostynin',
   addressShort: 'Białe 22a, gmina Gostynin',
-  company: 'Gospodarstwo Agroturystyczne „Karpik”',
+  company: 'Domki nad Białym', // do uzupełnienia: pełna nazwa firmy właściciela z NIP-em
   nip: '[NIP]',
   bankAccount: '00 0000 0000 0000 0000 0000 0000',
   phone: '123 456 789', // numer przykładowy, do podmiany na prawdziwy
@@ -35,6 +35,7 @@ export const site = {
   freeCancelDays: 14,
   payments: 'gotówką, przelewem lub kartą',
   beachDistance: '650 m',
+  shopDistance: '50 m', // sklep w pobliżu, odległość orientacyjna do potwierdzenia
 };
 
 // „48 godzin”, „24 godziny”: poprawna odmiana dla dowolnej wartości holdHours.
@@ -166,20 +167,15 @@ export const extras = [
 
 // Wspólne dla wszystkich gości. Z ogłoszeń i opisu obiektu.
 export const grounds = [
-  { id: 'plaza', title: 'Plaża 650 m od domków', text: 'Plaża pod Lipami nad Jeziorem Białym. Piasek, pomosty i czysta, głęboka woda.', photo: 'teren-plaza' },
-  { id: 'staw', title: 'Staw do wędkowania', text: 'Na terenie gospodarstwa, z pomostem i ścieżką wokół brzegu.', photo: 'teren-staw' },
-  { id: 'plac', title: 'Plac zabaw', text: 'Zjeżdżalnie, huśtawki, trampolina i piaskownica na dużym, ogrodzonym trawniku.', photo: 'teren-plac' },
+  { id: 'laki', title: 'Zieleń i łąki dookoła', text: 'Domki stoją bezpośrednio obok zieleni i łąk. Jest cisza i spokój, a odległości między domkami są spore, więc masz prywatność.', photo: 'letniskowy-dzien' },
+  { id: 'staw', title: 'Staw do wędkowania', text: 'Łowienie jest możliwe, a staw i ryby są dla gości za darmo. Pomost i ścieżka wokół brzegu.', photo: 'teren-staw' },
+  { id: 'plac', title: 'Plac zabaw i strefa dla dzieci', text: 'Zjeżdżalnie, ścianka wspinaczkowa, huśtawki, trampolina i piaskownica na dużym, ogrodzonym trawniku. Wkrótce małpi gaj.', photo: 'teren-plac' },
   { id: 'ognisko', title: 'Ognisko i grill', text: 'Miejsce na ognisko pod girlandą świateł, grill i stół do ping-ponga pod pergolą.', photo: 'teren-ognisko' },
 ];
 
-export const barInfo = {
-  // Godzin otwarcia nie ma w ogłoszeniach. Do uzupełnienia przez właściciela, null = nie pokazujemy.
-  hours: null,
-  meals: ['Śniadania', 'Domowe obiady', 'Kolacje', 'Napoje i piwo w ogródku'],
-};
+
 
 export const lakeFacts = [
-  { v: '650 m', l: 'do plaży pod Lipami' },
   { v: 'ok. 150 ha', l: 'powierzchnia jeziora' },
   { v: 'ponad 30 m', l: 'głębokość, jedno z najgłębszych jezior w okolicy' },
 ];
@@ -210,11 +206,13 @@ export const faq = [
   { id: 'doba', q: 'O której jest zameldowanie i wymeldowanie?', a: `Zameldowanie od ${site.checkIn}, wymeldowanie do ${site.checkOut}.` },
   { id: 'platnosc', q: 'Jak wygląda płatność?', a: `Rezerwację ustalasz telefonicznie albo przez formularz kontaktowy. Po ustaleniu terminu wpłacasz zaliczkę ${site.depositPercent}% przelewem w ciągu ${site.holdLabel}, a my potwierdzamy rezerwację. Resztę płacisz na miejscu ${site.payments}.` },
   { id: 'anulowanie', q: 'Czy mogę anulować rezerwację?', a: `Tak. Do ${site.freeCancelDays} dni przed przyjazdem zwracamy zaliczkę w całości. Przy późniejszej rezygnacji zadzwoń, a postaramy się znaleźć rozwiązanie.` },
-  { id: 'dzieci', q: 'Czy to dobre miejsce dla dzieci?', a: 'Bardzo. Teren jest ogrodzony, jest duży plac zabaw, trampolina, piaskownica, boisko do siatkówki i stół do ping-ponga, a w barze cymbergaj i automaty. Na miejscu jest łóżeczko i krzesełko do karmienia.' },
+  { id: 'dzieci', q: 'Czy to dobre miejsce dla dzieci?', a: 'Bardzo. Teren jest ogrodzony, jest duży plac zabaw ze zjeżdżalniami i ścianką wspinaczkową, trampolina, piaskownica, boisko do siatkówki i stół do ping-ponga. Niebawem dojdzie małpi gaj. Na miejscu jest łóżeczko i krzesełko do karmienia. Więcej w zakładce Strefa dla dzieci.' },
+  { id: 'urodziny', q: 'Czy można zorganizować urodziny?', a: 'Tak, możemy zorganizować urodziny. Zadzwoń albo napisz, ile osób i jaki termin, a ustalimy szczegóły.' },
+  { id: 'prywatnosc', q: 'Czy domki stoją blisko siebie?', a: 'Domki stoją bezpośrednio obok zieleni i łąk, a między nimi są spore odległości, więc nie masz sąsiadów za ścianą. Jest cisza, spokój i prywatność.' },
   { id: 'pies', q: 'Czy można przyjechać z psem?', a: 'Psa przyjmujemy w Domku Rodzinnym, po wcześniejszym uzgodnieniu. W pozostałych domkach zwierzęta nie mogą przebywać.' },
-  { id: 'jedzenie', q: 'Czy na miejscu można zjeść?', a: 'Tak. Na terenie gospodarstwa jest sklep z barem, gdzie zjesz śniadanie, domowy obiad albo kolację i zrobisz podstawowe zakupy. Jest też ogródek piwny z parasolami.' },
-  { id: 'wedkowanie', q: 'Czy można łowić ryby?', a: 'Tak, na terenie gospodarstwa jest staw do wędkowania. Na jeziorze obowiązują zasady i zezwolenia właściwego gospodarza wód.' },
-  { id: 'jezioro', q: 'Jak daleko jest do jeziora?', a: `Do plaży pod Lipami nad Jeziorem Białym jest ${site.beachDistance}, kilka minut spacerem.` },
+  { id: 'jedzenie', q: 'Czy na miejscu można zjeść?', a: `Domki mają kuchnie lub aneksy kuchenne, więc możesz gotować samodzielnie. Sklep jest w pobliżu, około ${site.shopDistance} od domków.` },
+  { id: 'wedkowanie', q: 'Czy można łowić ryby?', a: 'Tak, łowienie jest możliwe. Staw na terenie i ryby są dla gości za darmo.' },
+  { id: 'jezioro', q: 'Jak jest z plażą i jeziorem?', a: `Do plaży nad Jeziorem Białym jest około ${site.beachDistance}. Domki nie mają nic wspólnego z plażą: wejście na plażę jest płatne na wszystkich plażach, a zasady ustala właściciel plaży, z którym trzeba się dogadać.` },
   { id: 'parking', q: 'Czy jest parking?', a: 'Tak, parking dla gości jest bezpłatny.' },
   { id: 'dojazd', q: 'Jak dojechać?', a: `Adres to ${site.address}. Autem z Płocka to około 35 minut, z Gostynina około 20 minut, z Warszawy około 2 godzin i 10 minut.` },
 ];
@@ -223,5 +221,5 @@ export const botStarters = [
   'Co jest wolne w lipcu?',
   'Ile kosztuje domek dla 4 osób?',
   'Czy jest balia?',
-  'Czy mogę przyjechać z psem?',
+  'Czy można zorganizować urodziny?',
 ];

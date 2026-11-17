@@ -77,28 +77,30 @@ const INTENTS = [
   { id: 'holiday', re: /sylwest|swiet|boze cialo|bozego ciala|majowk|wielkanoc/, answer: () => ({ text: faqAnswer('swieta') }) },
   { id: 'minimum', re: /minimal|minimum|najkrot|jedna noc|jedną noc|na jedna|na noc\b|na weekend|weekend/, answer: () => ({ text: faqAnswer('minimum') }) },
   { id: 'tub', re: /jacuzzi|balia|balii|bali\b|spa\b|wanna|hot tub|sauna/, answer: () => ({ text: faqAnswer('balia'), chips: ['Pokaż Stodołę'] }) },
-  { id: 'kids', re: /\b(dzieci|dzieck|dzieckiem|lozeczk|krzeselk|rodzin|plac zabaw|trampolin)\w*/, answer: () => ({ text: faqAnswer('dzieci') }) },
+  { id: 'kids', re: /\b(dzieci|dzieck|dzieckiem|lozeczk|krzeselk|rodzin|plac zabaw|trampolin|malpi)\w*/, answer: () => ({ text: `${faqAnswer('dzieci')} [Strefa dla dzieci](/karpik/dzieci).` }) },
+  { id: 'birthday', re: /urodzin/, answer: () => ({ text: faqAnswer('urodziny') }) },
+  { id: 'privacy', re: /prywatnos|cisza|spokoj|odleglosc\w* miedzy|blisko siebie|sasiad/, answer: () => ({ text: faqAnswer('prywatnosc') }) },
   { id: 'checkin', re: /zameldow|wymeldow|doba hotelowa|o ktorej|check.?in|check.?out|przyjazd.*godzin|godzin.*przyjazd/, answer: () => ({ text: faqAnswer('doba') }) },
   { id: 'cancel', re: /anulow|rezygn|odwolac|zwrot|przelozyc/, answer: () => ({ text: faqAnswer('anulowanie') }) },
   { id: 'payment', re: /zaliczk|platno|zaplac|przelew|blik|karta|kart[aą]|gotowk|kaucj/, answer: () => ({ text: faqAnswer('platnosc') }) },
   { id: 'fishing', re: /ryb|wedk|lowisk|staw|karp/, answer: () => ({ text: faqAnswer('wedkowanie') }) },
   { id: 'food', re: /\b(bar|baru|barze|sklep\w*|restaurac\w*|obiad\w*|kolacj\w*|sniadani\w*|jedzeni\w*|zjesc|posilk\w*|piwo|ogrodek)\b/, answer: () => ({
-    text: `${faqAnswer('jedzenie')} Więcej na stronie [baru i sklepu](/karpik/bar).`,
+    text: faqAnswer('jedzenie'),
   }) },
   { id: 'parking', re: /parking|zaparkow|auto\b|samochod/, answer: () => ({ text: faqAnswer('parking') }) },
   { id: 'lake', re: /jezior|plaz|kapiel|kapac|woda|wody|pomost|kajak|rower wodn|sup\b/, answer: () => ({
-    text: `${faqAnswer('jezioro')} Samo jezioro: ${lakeFacts.slice(1).map((f) => `${f.v} (${f.l})`).join(', ')}. O sprzęt wodny zapytaj na plaży. Więcej w zakładce [Okolica](/karpik/okolica).`,
+    text: `${faqAnswer('jezioro')} Samo jezioro: ${lakeFacts.map((f) => `${f.v} (${f.l})`).join(', ')}. Więcej w zakładce [Okolica](/karpik/okolica).`,
   }) },
   { id: 'route', re: /dojazd|dojechac|jak trafic|adres|gdzie (jest|lezy|sa|to)|lokalizac|odleglos|daleko|mapa|pociag/, answer: () => ({
     text: `Adres: ${site.address}. ${distances.slice(0, 2).concat(distances.at(-1)).map((d) => `${d.to}: ${d.km} km, ${d.time}`).join('; ')}. [Wyznacz trasę](${site.directionsUrl}).`,
   }) },
   { id: 'around', re: /atrakcj|okolic|zwiedz|co robic|co mozna|plock|wycieczk|las\b|spacer/, answer: () => ({
-    text: `Na miejscu: plaża 650 m, staw do wędkowania, plac zabaw, boisko i ognisko. W okolicy: ${attractions.slice(0, 4).map((a) => `**${a.name}** (${a.where})`).join(', ')}. Więcej w zakładce [Okolica](/karpik/okolica).`,
+    text: `Na miejscu: zieleń i łąki dookoła, staw do wędkowania, plac zabaw ([strefa dla dzieci](/karpik/dzieci)), boisko i ognisko. W okolicy: ${attractions.slice(0, 4).map((a) => `**${a.name}** (${a.where})`).join(', ')}. Więcej w zakładce [Okolica](/karpik/okolica).`,
   }) },
   { id: 'equipment', re: /wifi|wi-fi|internet|klimatyzac|ogrzewan|kuchni|zmywark|pralk|lodowk|telewiz|tv\b|recznik|posciel/, answer: () => ({
     text: 'Wszystkie domki mają klimatyzację, ogrzewanie, telewizor, lodówkę, mikrofalówkę, czajnik, naczynia i pościel. Stodoła ma też zmywarkę i pralkę. Dokładne wyposażenie znajdziesz na stronie [każdego domku](/karpik/domki/).',
   }) },
-  { id: 'event', re: /wesel|impreza|urodzin|panieck|kawalersk|integrac|firmow|konferenc/, answer: () => ({
+  { id: 'event', re: /wesel|impreza|panieck|kawalersk|integrac|firmow|konferenc/, answer: () => ({
     text: `Większe spotkania ustalamy indywidualnie. Napisz, ile osób i jaki termin: [formularz kontaktowy](/karpik/kontakt) albo telefon ${contact()}.`,
   }) },
 ];
