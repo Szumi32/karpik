@@ -818,3 +818,8 @@ button.search__field:hover, button.search__field.is-open { background: rgba(127,
 .band figcaption { position: absolute; inset: auto 0 0; padding: 28px clamp(18px, 3vw, 36px); color: #fff; background: linear-gradient(0deg, rgba(13, 14, 11, .78), rgba(13, 14, 11, 0)); }
 .band h3 { margin: 0 0 4px; font-size: 1.3rem; }
 .band p { margin: 0; max-width: 46ch; }
+
+.clips { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px; margin: 20px 0 28px; }
+.clips .clip { flex: 0 1 240px; margin: 0; }
+.clips .clip--wide { flex: 1 1 340px; max-width: 560px; }
+.clip--wide video { aspect-ratio: 16 / 9; }
