@@ -75,3 +75,16 @@ initBot($('[data-bot]'));
 $$('[data-ask]').forEach((btn) => btn.addEventListener('click', () => {
   window.dispatchEvent(new CustomEvent('bot:ask', { detail: btn.dataset.ask }));
 }));
+
+// Film z YouTube: odtwarzacz ładuje się dopiero po kliknięciu (bez śledzenia i bez spowalniania strony).
+document.addEventListener('click', (e) => {
+  const button = e.target.closest('.yt__play');
+  if (!button) return;
+  const frame = button.closest('[data-yt]');
+  const iframe = document.createElement('iframe');
+  iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(frame.dataset.yt)}?autoplay=1&rel=0&modestbranding=1`;
+  iframe.title = frame.dataset.title || 'Film';
+  iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+  iframe.allowFullscreen = true;
+  frame.replaceChildren(iframe);
+});

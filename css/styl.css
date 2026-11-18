@@ -802,3 +802,19 @@ button.search__field:hover, button.search__field.is-open { background: rgba(127,
 .mc__day.is-past { color: #b5b2a8; }
 .mc__legend { font-size: .85rem; color: #5c5c55; margin: .75rem 0 0; }
 .book-card__text { margin: 0 0 14px; }
+
+/* Film z YouTube, krótki film z balii i pasek „domki całoroczne” */
+.yt { max-width: 960px; margin: 0 auto; }
+.yt__frame { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #0d0e0b; }
+.yt__frame img, .yt__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
+.yt__play { position: absolute; inset: 0; display: grid; place-items: center; width: 100%; padding: 0; background: transparent; border: 0; cursor: pointer; }
+.yt__play svg { width: 84px; height: 84px; filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .45)); transition: transform .2s; }
+.yt__play:hover svg, .yt__play:focus-visible svg { transform: scale(1.08); }
+.yt figcaption, .clip figcaption { margin-top: 10px; font-size: .9rem; color: var(--muted); }
+.clip { max-width: 320px; margin: 20px 0 28px; }
+.clip video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; border-radius: 14px; background: #0d0e0b; }
+.band { position: relative; margin: 0; border-radius: 16px; overflow: hidden; }
+.band img { display: block; width: 100%; height: clamp(300px, 42vw, 520px); object-fit: cover; object-position: center 62%; }
+.band figcaption { position: absolute; inset: auto 0 0; padding: 28px clamp(18px, 3vw, 36px); color: #fff; background: linear-gradient(0deg, rgba(13, 14, 11, .78), rgba(13, 14, 11, 0)); }
+.band h3 { margin: 0 0 4px; font-size: 1.3rem; }
+.band p { margin: 0; max-width: 46ch; }

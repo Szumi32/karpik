@@ -75,7 +75,7 @@ export const cabins = [
     minStay: 1,
     summerMinStay: 4,
     pets: false,
-    photos: ['stodola-noc', 'stodola-salon', 'stodola-antresola', 'stodola-balia', 'stodola-kuchnia', 'stodola-widok', 'stodola-sypialnia', 'stodola-piec', 'stodola-lazienka', 'stodola-dzien'],
+    photos: ['stodola-noc', 'stodola-zlota', 'stodola-salon', 'stodola-antresola', 'stodola-balia', 'stodola-balia-noc', 'stodola-kuchnia', 'stodola-widok', 'stodola-sypialnia', 'stodola-piec', 'stodola-lazienka', 'stodola-dzien', 'stodola-trawnik'],
     lead: 'Nowoczesna stodoła z przeszkloną elewacją, dwoma tarasami i własną strefą balii. Pomieści nawet dziewięć osób.',
     text: [
       'Stodoła ma 50 m² i prostą, elegancką formę w odcieniach szarości. Na dole jest salon z w pełni wyposażonym aneksem kuchennym, łazienka i sypialnia, a pod dachem antresola, która służy jako druga sypialnia.',
@@ -100,7 +100,7 @@ export const cabins = [
     minStay: 4,
     summerMinStay: 4,
     pets: true,
-    photos: ['rodzinny-dzien', 'rodzinny-kuchnia', 'rodzinny-salon', 'rodzinny-sypialnia', 'rodzinny-lazienka'],
+    photos: ['rodzinny-dzien', 'rodzinny-kuchnia', 'rodzinny-salon', 'rodzinny-sypialnia', 'rodzinny-sypialnia-2', 'rodzinny-lazienka'],
     lead: 'Największy z drewnianych domków. Na dole duża kuchnia z jadalnią i salon, na górze dwa pokoje do spania.',
     text: [
       'Domek Rodzinny to dobry wybór dla rodziny z dziećmi albo dwóch zaprzyjaźnionych par. Na parterze jest salon z narożnikiem, kuchnia z dużym stołem i łazienka z prysznicem, a na piętrze dwa pokoje pod drewnianym dachem.',
@@ -125,7 +125,7 @@ export const cabins = [
     minStay: 4,
     summerMinStay: 4,
     pets: false,
-    photos: ['letniskowy-dzien', 'letniskowy-salon', 'letniskowy-noc', 'letniskowy-kuchnia', 'letniskowy-sypialnia', 'letniskowy-jadalnia', 'letniskowy-lazienka', 'letniskowy-taras'],
+    photos: ['letniskowy-dzien', 'letniskowy-salon', 'letniskowy-noc', 'letniskowy-kuchnia', 'letniskowy-sypialnia', 'letniskowy-jadalnia', 'letniskowy-widok', 'letniskowy-lazienka', 'letniskowy-taras', 'letniskowy-pergola', 'letniskowy-fotel'],
     lead: 'Nowy, jasny domek z przeszklonym szczytem i podświetlonym tarasem. Salon z aneksem kuchennym, sypialnia i łazienka.',
     text: [
       'Domek Letniskowy jest nowy i wykończony w jasnym drewnie. Z salonu przez przeszklone drzwi wychodzisz prosto na trawnik, a wieczorem taras przed domkiem jest podświetlony.',
@@ -150,7 +150,7 @@ export const cabins = [
     minStay: 4,
     summerMinStay: 4,
     pets: false,
-    photos: ['drewniany-dzien', 'drewniany-salon', 'drewniany-kuchnia', 'drewniany-bok'],
+    photos: ['drewniany-dzien', 'drewniany-ogrod', 'drewniany-salon', 'drewniany-kuchnia', 'drewniany-bok'],
     lead: 'Najmniejszy i najtańszy domek. Drewniane wnętrze, salon z aneksem kuchennym i łazienka.',
     text: [
       'Domek Drewniany wybierają pary i małe rodziny, które większość dnia spędzają nad jeziorem. W środku jest w pełni wyposażony salon z aneksem kuchennym i łazienka.',
@@ -167,7 +167,7 @@ export const extras = [
 
 // Wspólne dla wszystkich gości. Z ogłoszeń i opisu obiektu.
 export const grounds = [
-  { id: 'laki', title: 'Zieleń i łąki dookoła', text: 'Domki stoją bezpośrednio obok zieleni i łąk. Jest cisza i spokój, a odległości między domkami są spore, więc masz prywatność.', photo: 'letniskowy-dzien' },
+  { id: 'laki', title: 'Zieleń i łąki dookoła', text: 'Domki stoją bezpośrednio obok zieleni i łąk. Jest cisza i spokój, a odległości między domkami są spore, więc masz prywatność.', photo: 'teren-laka-bocian' },
   { id: 'staw', title: 'Staw do wędkowania', text: 'Łowienie jest możliwe, a staw i ryby są dla gości za darmo. Pomost i ścieżka wokół brzegu.', photo: 'teren-staw' },
   { id: 'plac', title: 'Plac zabaw i strefa dla dzieci', text: 'Zjeżdżalnie, ścianka wspinaczkowa, huśtawki, trampolina i piaskownica na dużym, ogrodzonym trawniku. Wkrótce małpi gaj.', photo: 'teren-plac' },
   { id: 'ognisko', title: 'Ognisko i grill', text: 'Miejsce na ognisko pod girlandą świateł, grill i stół do ping-ponga pod pergolą.', photo: 'teren-ognisko' },
