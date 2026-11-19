@@ -31,68 +31,73 @@ toggle?.addEventListener('click', () => setNav(mobileNav.hidden));
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setNav(false); });
 $$('a', mobileNav).forEach((a) => a.addEventListener('click', () => setNav(false)));
 
-/* Karty domków: zdjęcia zmieniają się same (bez najeżdżania), a po najechaniu myszą przewijają się szybciej. */
+/* Karty domków: zdjęcia zmieniają się same i wszystkie naraz, w tym samym rytmie (jeden wspólny zegar). */
 const photoSrc = (name) => `/karpik/img/${name}-800.webp`;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const AUTO_MS = 3600;
-$$('.cabin-card[data-photos]').forEach((card, n) => {
+let slide = 0;
+const cards = $$('.cabin-card[data-photos]').map((card) => {
   const media = $('.cabin-card__media', card);
   const dots = $$('.cabin-card__dots i', card);
   const names = card.dataset.photos.split(',');
-  let imgs = null;
-  let timer = null;
-  let auto = null;
-  let index = 0;
-  let visible = false;
-  let hovering = false;
-  const show = (i) => {
-    index = i;
-    imgs.forEach((im, k) => im.classList.toggle('is-active', k === i));
-    dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+  const total = names.length + 1;
+  const c = { imgs: null, hovering: false, timer: null };
+  const apply = () => {
+    if (!c.imgs) return;
+    c.imgs.forEach((im, k) => im.classList.toggle('is-active', k === slide));
+    dots.forEach((d, k) => d.classList.toggle('is-active', k === slide));
   };
   const prepare = () => {
-    if (imgs) return;
-    imgs = [$('img', media)];
+    if (c.imgs) return;
+    c.imgs = [$('img', media)];
     names.forEach((name) => {
       const im = new Image();
       im.src = photoSrc(name);
       im.alt = '';
       im.loading = 'eager';
       media.insertBefore(im, $('.cabin-card__dots', media));
-      imgs.push(im);
+      c.imgs.push(im);
     });
   };
-  const next = () => { prepare(); show((index + 1) % imgs.length); };
-  // Karty przesuwają się z różnym rytmem, żeby wszystkie nie zmieniały zdjęć w jednej chwili.
-  const startAuto = () => {
-    if (reduceMotion || auto || hovering || !visible || document.hidden) return;
-    auto = setInterval(next, AUTO_MS + n * 500);
-  };
-  const stopAuto = () => { clearInterval(auto); auto = null; };
-
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      if (visible) startAuto(); else stopAuto();
-    }, { threshold: 0.35 }).observe(card);
-  }
-  document.addEventListener('visibilitychange', () => (document.hidden ? stopAuto() : startAuto()));
-
+  c.total = total;
+  c.visible = false;
+  c.sync = () => { if (c.visible && !c.hovering) { prepare(); apply(); } };
+  // Po najechaniu myszą ta karta przewija się szybciej, po zjechaniu wraca do wspólnego rytmu.
   media.addEventListener('pointerenter', (e) => {
     if (e.pointerType !== 'mouse') return;
-    hovering = true;
-    stopAuto();
-    next();
-    clearInterval(timer);
-    timer = setInterval(next, 1500);
+    c.hovering = true;
+    prepare();
+    let i = slide;
+    const step = () => {
+      i = (i + 1) % total;
+      c.imgs.forEach((im, k) => im.classList.toggle('is-active', k === i));
+      dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+    };
+    step();
+    clearInterval(c.timer);
+    c.timer = setInterval(step, 1500);
   });
   media.addEventListener('pointerleave', () => {
-    if (!hovering) return;
-    hovering = false;
-    clearInterval(timer);
-    startAuto();
+    if (!c.hovering) return;
+    c.hovering = false;
+    clearInterval(c.timer);
+    apply();
   });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      c.visible = entry.isIntersecting;
+      c.sync();
+    }, { threshold: 0.35 }).observe(card);
+  }
+  return c;
 });
+if (cards.length && !reduceMotion) {
+  setInterval(() => {
+    if (document.hidden) return;
+    slide = (slide + 1) % cards[0].total;
+    cards.forEach((c) => c.sync());
+  }, AUTO_MS);
+}
 /* Asystent */
 initBot($('[data-bot]'));
 $$('[data-ask]').forEach((btn) => btn.addEventListener('click', () => {

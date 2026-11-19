@@ -857,3 +857,7 @@ button.search__field:hover, button.search__field.is-open { background: rgba(127,
 .cabin__fig figcaption { margin-top: 8px; color: var(--muted); font-size: .92rem; }
 /* Zdjęcia na kartach zmieniają się same, więc kropki są widoczne zawsze */
 .cabin-card__dots { opacity: 1; }
+/* Wideo w tle wejścia (YouTube), przycięte jak zdjęcie */
+.hero__media { container-type: size; }
+.hero__video { position: absolute; top: 50%; left: 50%; width: max(100cqw, 177.78cqh); height: max(100cqh, 56.25cqw); transform: translate(-50%, -50%); border: 0; pointer-events: none; opacity: 0; transition: opacity 1.4s var(--ease); }
+.hero__video.is-playing { opacity: 1; }

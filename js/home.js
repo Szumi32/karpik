@@ -53,6 +53,47 @@ $$('[data-search]').forEach((form) => {
   });
 });
 
+/* Wideo w tle wejścia: film z YouTube (bez dźwięku, bez kontrolek, zapętlony wycinek). Zdjęcie zostaje jako zapasowe. */
+const hero = $('[data-hero][data-bg-video]');
+const saveData = navigator.connection?.saveData;
+if (hero && !saveData && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const { bgVideo: id, start, end } = hero.dataset;
+  const from = Number(start) || 0;
+  const to = Number(end) || 0;
+  const startVideo = () => {
+    const frame = document.createElement('iframe');
+    const params = new URLSearchParams({
+      autoplay: '1', mute: '1', controls: '0', loop: '1', playlist: id, start: String(from), end: String(to),
+      modestbranding: '1', rel: '0', playsinline: '1', disablekb: '1', fs: '0', iv_load_policy: '3', enablejsapi: '1',
+    });
+    frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?${params}`;
+    frame.className = 'hero__video';
+    frame.tabIndex = -1;
+    frame.setAttribute('aria-hidden', 'true');
+    frame.allow = 'autoplay; encrypted-media';
+    const post = (msg) => frame.contentWindow?.postMessage(JSON.stringify(msg), '*');
+    const onMessage = (e) => {
+      if (e.source !== frame.contentWindow) return;
+      let data;
+      try { data = JSON.parse(e.data); } catch { return; }
+      const playing = (data.event === 'onStateChange' && data.info === 1) || (data.event === 'infoDelivery' && data.info?.playerState === 1);
+      if (playing) frame.classList.add('is-playing');
+      // Zapętlenie wycinka: na końcu wracamy do początku.
+      const t = data.event === 'infoDelivery' ? data.info?.currentTime : undefined;
+      if (to && typeof t === 'number' && t >= to - 0.4) post({ event: 'command', func: 'seekTo', args: [from, true] });
+    };
+    window.addEventListener('message', onMessage);
+    frame.addEventListener('load', () => post({ event: 'listening', id: 1, channel: 'widget' }));
+    $('.hero__img', hero.querySelector('.hero__media')).after(frame);
+    // Gdyby film się nie uruchomił, zostaje zdjęcie.
+    setTimeout(() => {
+      if (!frame.classList.contains('is-playing')) { frame.remove(); window.removeEventListener('message', onMessage); }
+    }, 9000);
+  };
+  if (document.readyState === 'complete') setTimeout(startVideo, 400);
+  else window.addEventListener('load', () => setTimeout(startVideo, 400), { once: true });
+}
+
 /* Najbliższe wolne terminy */
 const freeHolders = $$('[data-next-free]');
 const weekendLive = $('[data-weekend-live]');
