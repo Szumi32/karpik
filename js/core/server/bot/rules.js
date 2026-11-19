@@ -11,6 +11,7 @@ const fitting = (guests) => allCabins().filter((c) => c.guests >= guests);
 const cabinLine = (c) => `**${c.name}**: do ${c.guests} os.${c.area ? `, ${c.area} m²` : ''}, ${formatPrice(c.price)} za dobę${c.extraGuestPrice ? ` (w cenie ${c.guestsIncluded} os.)` : ''}`;
 const MONTH_LOC = ['styczniu', 'lutym', 'marcu', 'kwietniu', 'maju', 'czerwcu', 'lipcu', 'sierpniu', 'wrześniu', 'październiku', 'listopadzie', 'grudniu'];
 const contact = () => `[${site.phone}](tel:${site.phoneHref})`;
+const sms = () => `[wyślij SMS](${site.smsHref})`;
 
 function availabilityAnswer(stay, today) {
   const guests = stay.guests || 2;
@@ -19,11 +20,11 @@ function availabilityAnswer(stay, today) {
     if (res.error) return { text: `${res.error} Podaj proszę daty w przyszłości, na przykład „12-16 lipca”.` };
     const label = stay.label ? `${stay.label} (${formatRange(stay.checkIn, stay.checkOut)})` : formatRange(stay.checkIn, stay.checkOut);
     if (res.inquiry && !res.free.length) {
-      return { text: `${res.inquiry} Telefon: ${contact()}, albo napisz przez [formularz kontaktowy](/karpik/kontakt).` };
+      return { text: `${res.inquiry} Zadzwoń: ${contact()} albo ${sms()}.` };
     }
     if (res.tooShort) {
       return {
-        text: `W tym terminie minimalny pobyt to ${pluralNights(res.minStay)}. W domkach drewnianych zawsze co najmniej 4 noce, a Stodołę poza latem wynajmiesz nawet na jedną noc. [Sprawdź terminy](/karpik/terminy).`,
+        text: `W tym terminie minimalny pobyt to ${pluralNights(res.minStay)}. W lipcu i sierpniu w każdym domku obowiązują co najmniej 4 noce, poza sezonem możliwy jest krótszy pobyt. [Sprawdź terminy](/karpik/terminy).`,
         chips: ['Jaki jest najbliższy wolny termin?'],
       };
     }
@@ -68,16 +69,16 @@ const INTENTS = [
   }) },
   { id: 'thanks', re: /\b(dzieki|dziekuje|dzienki|super|ok dzieki)\b/, answer: () => ({ text: 'Bardzo proszę. Jeśli coś jeszcze przyjdzie Ci do głowy, pisz śmiało.' }) },
   { id: 'human', re: /\b(telefon|numer|zadzwon|kontakt|mail|e-mail|email|czlowiek|obsluga|wlasciciel|konsultant|recepcj)\b/, answer: () => ({
-    text: `Telefon: ${contact()}, e-mail: [${site.email}](mailto:${site.email}). Możesz też napisać przez [formularz kontaktowy](/karpik/kontakt).`,
+    text: `Kontakt jest telefoniczny: zadzwoń ${contact()} albo ${sms()}.`,
   }) },
   { id: 'howbook', re: /\b(jak|gdzie)\b.*\b(zarezerw|rezerwac|zamowic)|chce zarezerwowac|chcialbym zarezerwowac|chcialabym zarezerwowac/, answer: () => ({
-    text: `Rezerwację ustalasz telefonicznie albo przez [formularz kontaktowy](/karpik/kontakt). Po ustaleniu terminu wpłacasz zaliczkę ${site.depositPercent}% w ciągu ${site.holdLabel}. Wolne dni sprawdzisz w [terminach](/karpik/terminy).`,
+    text: `Rezerwację ustalasz telefonicznie: zadzwoń ${contact()} albo ${sms()}. Po ustaleniu terminu wpłacasz zaliczkę ${site.depositPercent}% w ciągu ${site.holdLabel}. Wolne dni sprawdzisz w [terminach](/karpik/terminy).`,
   }) },
-  { id: 'dog', re: /\b(pies|psem|psa|psiak|zwierz|kot|kota)\w*/, answer: () => ({ text: faqAnswer('pies'), chips: ['Pokaż Domek Rodzinny'] }) },
+  { id: 'dog', re: /\b(pies|psem|psa|psiak|zwierz|kot|kota)\w*/, answer: () => ({ text: `Tego nie mam w opisie obiektu, więc najlepiej zapytać telefonicznie: ${contact()}.` }) },
   { id: 'holiday', re: /sylwest|swiet|boze cialo|bozego ciala|majowk|wielkanoc/, answer: () => ({ text: faqAnswer('swieta') }) },
   { id: 'minimum', re: /minimal|minimum|najkrot|jedna noc|jedną noc|na jedna|na noc\b|na weekend|weekend/, answer: () => ({ text: faqAnswer('minimum') }) },
   { id: 'tub', re: /jacuzzi|balia|balii|bali\b|spa\b|wanna|hot tub|sauna/, answer: () => ({ text: faqAnswer('balia'), chips: ['Pokaż Stodołę'] }) },
-  { id: 'kids', re: /\b(dzieci|dzieck|dzieckiem|lozeczk|krzeselk|rodzin|plac zabaw|trampolin|malpi)\w*/, answer: () => ({ text: `${faqAnswer('dzieci')} [Strefa dla dzieci](/karpik/dzieci).` }) },
+  { id: 'kids', re: /\b(dzieci|dzieck|dzieckiem|lozeczk|krzeselk|rodzin|plac zabaw|trampolin)\w*/, answer: () => ({ text: `${faqAnswer('dzieci')} [Strefa dla dzieci](/karpik/dzieci).` }) },
   { id: 'birthday', re: /urodzin/, answer: () => ({ text: faqAnswer('urodziny') }) },
   { id: 'privacy', re: /prywatnos|cisza|spokoj|odleglosc\w* miedzy|blisko siebie|sasiad/, answer: () => ({ text: faqAnswer('prywatnosc') }) },
   { id: 'checkin', re: /zameldow|wymeldow|doba hotelowa|o ktorej|check.?in|check.?out|przyjazd.*godzin|godzin.*przyjazd/, answer: () => ({ text: faqAnswer('doba') }) },
@@ -95,18 +96,18 @@ const INTENTS = [
     text: `Adres: ${site.address}. ${distances.slice(0, 2).concat(distances.at(-1)).map((d) => `${d.to}: ${d.km} km, ${d.time}`).join('; ')}. [Wyznacz trasę](${site.directionsUrl}).`,
   }) },
   { id: 'around', re: /atrakcj|okolic|zwiedz|co robic|co mozna|plock|wycieczk|las\b|spacer/, answer: () => ({
-    text: `Na miejscu: zieleń i łąki dookoła, staw do wędkowania, plac zabaw ([strefa dla dzieci](/karpik/dzieci)), boisko i ognisko. W okolicy: ${attractions.slice(0, 4).map((a) => `**${a.name}** (${a.where})`).join(', ')}. Więcej w zakładce [Okolica](/karpik/okolica).`,
+    text: `Na miejscu: zieleń i łąki dookoła, staw do wędkowania, plac zabaw ([strefa dla dzieci](/karpik/dzieci)), ping-pong i ognisko ([więcej na miejscu](/karpik/na-miejscu)). W okolicy: ${attractions.slice(0, 4).map((a) => `**${a.name}** (${a.where})`).join(', ')}. Więcej w zakładce [Okolica](/karpik/okolica).`,
   }) },
   { id: 'equipment', re: /wifi|wi-fi|internet|klimatyzac|ogrzewan|kuchni|zmywark|pralk|lodowk|telewiz|tv\b|recznik|posciel/, answer: () => ({
     text: 'Wszystkie domki mają klimatyzację, ogrzewanie, telewizor, lodówkę, mikrofalówkę, czajnik, naczynia i pościel. Stodoła ma też zmywarkę i pralkę. Dokładne wyposażenie znajdziesz na stronie [każdego domku](/karpik/domki/).',
   }) },
   { id: 'event', re: /wesel|impreza|panieck|kawalersk|integrac|firmow|konferenc/, answer: () => ({
-    text: `Większe spotkania ustalamy indywidualnie. Napisz, ile osób i jaki termin: [formularz kontaktowy](/karpik/kontakt) albo telefon ${contact()}.`,
+    text: `Większe spotkania ustalamy indywidualnie. Zadzwoń ${contact()} albo ${sms()} i podaj, ile osób i jaki termin.`,
   }) },
 ];
 
 // Nazwy domków w pytaniach: odmiana po początku słowa.
-const CABIN_RE = [['stodola', /\bstodol\w*/], ['rodzinny', /\brodzinn\w*/], ['letniskowy', /\bletniskow\w*/], ['drewniany', /\bdrewnian\w*|\bnajmniejsz\w*|\bnajtansz\w*/]];
+const CABIN_RE = [['stodola', /\bstodol\w*/], ['rodzinny', /\brodzinn\w*|\bdrewnian\w*\s+duz\w*|\bduz\w*\s+drewnian\w*|\bnajwieksz\w*\s+domek/], ['letniskowy', /\bletniskow\w*|\bgrafit\w*/], ['drewniany', /\bdrewnian\w*|\bnajmniejsz\w*|\bnajtansz\w*/]];
 const AVAIL_RE = /wolne|wolny|wolna|wolnych|dostepn|termin|zajet|czy jest|macie cos|miejsc|rezerw|wynajac|wynajem|przyjechac|przyjazd|sprawdz/;
 const PRICE_RE = /\b(cen\w*|cennik\w*|ile kosztuj\w*|ile to kosztuje|kosztuje|koszt\w*|za noc|za dobe|ile za|drogo|tanio|tani\w*|promocj\w*|znizk\w*|rabat\w*)\b/;
 
@@ -159,7 +160,7 @@ export function answerRules(raw, history = []) {
   if (PRICE_RE.test(t)) {
     const guests = stay.guests;
     const list = guests ? fitting(guests) : allCabins();
-    if (!list.length) return { text: 'Największy dom mieści 9 osób. Dla większej grupy możesz wynająć kilka domków, napisz przez [formularz kontaktowy](/karpik/kontakt).' };
+    if (!list.length) return { text: 'Największy dom mieści 9 osób. Dla większej grupy możesz wynająć kilka domków, zadzwoń, a doradzimy.' };
     return {
       text: `${guests ? `Dla ${guests} os. pasują:` : 'Ceny za dobę za cały domek:'}\n${list.map(cabinLine).join('\n')}\n\nBalia przy Stodole to dodatkowe 200 zł za dobę. Podaj daty, a policzę dokładną kwotę.`,
       chips: ['Co jest wolne w lipcu?', 'Jaki jest minimalny pobyt?'],
@@ -174,7 +175,7 @@ export function answerRules(raw, history = []) {
 
   if (stay.guests) {
     const list = fitting(stay.guests);
-    if (!list.length) return { text: 'Największy dom mieści 9 osób. Dla większej grupy możesz wynająć kilka domków, napisz przez [formularz kontaktowy](/karpik/kontakt).' };
+    if (!list.length) return { text: 'Największy dom mieści 9 osób. Dla większej grupy możesz wynająć kilka domków, zadzwoń, a doradzimy.' };
     return { text: `Dla ${stay.guests} os. pasują:\n${list.map(cabinLine).join('\n')}\n\nPodaj daty, a sprawdzę dostępność.` };
   }
 
@@ -183,7 +184,7 @@ export function answerRules(raw, history = []) {
   }
 
   return {
-    text: `Nie jestem pewien, czy dobrze rozumiem. Mogę sprawdzić wolne terminy, podać ceny albo opowiedzieć o domkach, balii, barze i okolicy. Możesz też zadzwonić: ${contact()}.`,
+    text: `Nie jestem pewien, czy dobrze rozumiem. Mogę sprawdzić wolne terminy, podać ceny albo opowiedzieć o domkach, balii, terenie i okolicy. Możesz też zadzwonić: ${contact()}.`,
     chips: ['Co jest wolne w lipcu?', 'Jakie macie domki?', 'Czy jest balia?'],
   };
 }

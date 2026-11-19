@@ -831,3 +831,29 @@ button.search__field:hover, button.search__field.is-open { background: rgba(127,
 .tub-flag span { font-size: .92rem; }
 .tub-flag:hover { background: #d89a5e; }
 .cabin__note { margin: 0 0 18px; padding: 10px 14px; border-radius: 10px; background: var(--bg-2); color: var(--muted); }
+/* Kalendarz miesiąca z zakładkami domków (strona główna i strony domków) */
+.mcal { max-width: 44rem; margin-inline: auto; }
+.mcal .mc { max-width: none; margin: 0; padding: 18px 18px 14px; background: var(--bg-2, #f3f1ea); border-radius: var(--radius, 14px); }
+.mcal__tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 0 0 14px; }
+.mcal__tab { padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line, #d9d6cb); text-decoration: none; font-size: .95rem; transition: background .2s, color .2s, border-color .2s; }
+.mcal__tab.is-active { background: var(--ink, #17180f); border-color: var(--ink, #17180f); color: #fff; }
+.mcal .mc__head [aria-disabled="true"] { opacity: .25; pointer-events: none; }
+.mcal.is-loading .mc__grid { opacity: .55; transition: opacity .2s; }
+.mcal .mc__legend { text-align: center; }
+@media (max-width: 600px) {
+  .mcal__tabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
+  .mcal__tab { flex: none; }
+  .mcal .mc { padding: 14px 10px 12px; }
+}
+
+/* Kontakt: rezerwacja telefoniczna i drobna uwaga o urodzinach */
+.contact-call h2 { margin-bottom: 14px; }
+.contact-call .btn-row { margin: 20px 0 0; }
+.contact-note { margin: 26px 0 0; font-size: .92rem; color: var(--muted); }
+.cabin__beach { color: var(--muted); font-size: .95rem; }
+.cabin__fig { margin: 18px 0 8px; }
+.cabin__fig { max-width: 26rem; }
+.cabin__fig img { width: 100%; max-height: 30rem; object-fit: cover; border-radius: var(--radius, 14px); display: block; }
+.cabin__fig figcaption { margin-top: 8px; color: var(--muted); font-size: .92rem; }
+/* Zdjęcia na kartach zmieniają się same, więc kropki są widoczne zawsze */
+.cabin-card__dots { opacity: 1; }

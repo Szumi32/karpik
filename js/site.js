@@ -31,15 +31,20 @@ toggle?.addEventListener('click', () => setNav(mobileNav.hidden));
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setNav(false); });
 $$('a', mobileNav).forEach((a) => a.addEventListener('click', () => setNav(false)));
 
-/* Karty domków: po najechaniu zdjęcia zmieniają się same, palcem przełącza się dotknięciem kropek */
+/* Karty domków: zdjęcia zmieniają się same (bez najeżdżania), a po najechaniu myszą przewijają się szybciej. */
 const photoSrc = (name) => `/karpik/img/${name}-800.webp`;
-$$('.cabin-card[data-photos]').forEach((card) => {
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const AUTO_MS = 3600;
+$$('.cabin-card[data-photos]').forEach((card, n) => {
   const media = $('.cabin-card__media', card);
   const dots = $$('.cabin-card__dots i', card);
   const names = card.dataset.photos.split(',');
   let imgs = null;
   let timer = null;
+  let auto = null;
   let index = 0;
+  let visible = false;
+  let hovering = false;
   const show = (i) => {
     index = i;
     imgs.forEach((im, k) => im.classList.toggle('is-active', k === i));
@@ -57,19 +62,37 @@ $$('.cabin-card[data-photos]').forEach((card) => {
       imgs.push(im);
     });
   };
+  const next = () => { prepare(); show((index + 1) % imgs.length); };
+  // Karty przesuwają się z różnym rytmem, żeby wszystkie nie zmieniały zdjęć w jednej chwili.
+  const startAuto = () => {
+    if (reduceMotion || auto || hovering || !visible || document.hidden) return;
+    auto = setInterval(next, AUTO_MS + n * 500);
+  };
+  const stopAuto = () => { clearInterval(auto); auto = null; };
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) startAuto(); else stopAuto();
+    }, { threshold: 0.35 }).observe(card);
+  }
+  document.addEventListener('visibilitychange', () => (document.hidden ? stopAuto() : startAuto()));
+
   media.addEventListener('pointerenter', (e) => {
     if (e.pointerType !== 'mouse') return;
-    prepare();
-    show((index + 1) % imgs.length);
+    hovering = true;
+    stopAuto();
+    next();
     clearInterval(timer);
-    timer = setInterval(() => show((index + 1) % imgs.length), 1500);
+    timer = setInterval(next, 1500);
   });
   media.addEventListener('pointerleave', () => {
+    if (!hovering) return;
+    hovering = false;
     clearInterval(timer);
-    if (imgs) show(0);
+    startAuto();
   });
 });
-
 /* Asystent */
 initBot($('[data-bot]'));
 $$('[data-ask]').forEach((btn) => btn.addEventListener('click', () => {
@@ -82,7 +105,11 @@ document.addEventListener('click', (e) => {
   if (!button) return;
   const frame = button.closest('[data-yt]');
   const iframe = document.createElement('iframe');
-  iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(frame.dataset.yt)}?autoplay=1&rel=0&modestbranding=1`;
+  const params = new URLSearchParams({ autoplay: '1', rel: '0', modestbranding: '1' });
+  // Wycinek filmu: od sekundy start do sekundy end (strona głowna: 0:13 do 1:10).
+  if (frame.dataset.start) params.set('start', frame.dataset.start);
+  if (frame.dataset.end) params.set('end', frame.dataset.end);
+  iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(frame.dataset.yt)}?${params}`;
   iframe.title = frame.dataset.title || 'Film';
   iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
   iframe.allowFullscreen = true;

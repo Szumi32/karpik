@@ -1,6 +1,7 @@
-// Strona główna i lista domków: wyszukiwarka, wolne terminy na żywo, oś czasu, jezioro.
+// Strona główna i lista domków: wyszukiwarka, wolne terminy na żywo, kalendarz miesiąca, jezioro.
 import { $, $$, api, fmtDateShort, fmtRange, nightsLabel } from './util.js';
 import { RangeCalendar, Timeline } from './calendar.js';
+import './mcal.js';
 
 /* Wyszukiwarka z kalendarzem w wyskakującym oknie */
 $$('[data-search]').forEach((form) => {

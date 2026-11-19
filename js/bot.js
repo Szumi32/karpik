@@ -8,7 +8,7 @@ const MARK = '<svg class="logo__mark" viewBox="0 0 32 32" fill="none" stroke-lin
 
 // Bezpieczne formatowanie: najpierw uciekamy wszystko, potem dopuszczamy pogrubienie i bezpieczne linki.
 function formatText(text) {
-  const safeHref = (href) => (/^(\/[^\s]*|tel:[+\d]+|mailto:[^\s]+|https:\/\/[^\s]+)$/.test(href) ? href : null);
+  const safeHref = (href) => (/^(\/[^\s]*|tel:[+\d]+|sms:[+\d]+|mailto:[^\s]+|https:\/\/[^\s]+)$/.test(href) ? href : null);
   const inline = (s) => esc(s)
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, label, href) => {
@@ -42,7 +42,7 @@ export function initBot(root) {
           <textarea rows="1" name="q" placeholder="Napisz pytanie" aria-label="Twoje pytanie" maxlength="700"></textarea>
           <button class="bot__send" type="submit" aria-label="Wyślij" disabled><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M10 16V4m-5 5 5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </form>
-        <p class="bot__foot">Asystent może się pomylić. Cena i dostępność w formularzu rezerwacji są wiążące.</p>
+        <p class="bot__foot">Asystent może się pomylić. Cenę i termin potwierdzamy telefonicznie.</p>
       </div>
     </section>`;
 
@@ -188,7 +188,7 @@ export function initBot(root) {
     }
     status.remove();
     if (!answer) {
-      answer = 'Nie mam teraz odpowiedzi. Spróbuj zapytać inaczej albo napisz do nas przez formularz kontaktowy.';
+      answer = 'Nie mam teraz odpowiedzi. Spróbuj zapytać inaczej albo zadzwoń lub wyślij nam SMS.';
       bubble('assistant', answer);
     }
     addCards(receivedCards);
