@@ -859,5 +859,13 @@ button.search__field:hover, button.search__field.is-open { background: rgba(127,
 /* Zdjęcia na kartach zmieniają się same, więc kropki są widoczne zawsze */
 .cabin-card__dots { opacity: 1; }
 /* Wideo w tle wejścia (YouTube), przycięte jak zdjęcie */
-.hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; pointer-events: none; opacity: 0; transition: opacity 1.4s var(--ease); }
-.hero__video.is-playing { opacity: 1; }
+/* Wideo w całej szerokości wejścia (bez przycinania do wąskiego pasa); zdjęcie znika, gdy film zacznie grać */
+.hero__bg { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s var(--ease); }
+.hero__bg::after { content: ''; position: absolute; inset: 0; background:
+  linear-gradient(90deg, rgba(13,14,11,.88) 0%, rgba(13,14,11,.62) 30%, rgba(13,14,11,.12) 62%, rgba(13,14,11,0) 80%),
+  linear-gradient(0deg, rgba(13,14,11,.92) 0%, rgba(13,14,11,.4) 24%, rgba(13,14,11,0) 50%),
+  linear-gradient(180deg, rgba(13,14,11,.6) 0%, rgba(13,14,11,0) 20%); }
+.hero__video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; pointer-events: none; display: block; }
+.hero.is-video .hero__bg { opacity: 1; }
+.hero.is-video .hero__media { opacity: 0; transition: opacity 1.4s var(--ease); }
+@media (max-width: 760px) { .hero__bg::after { background: linear-gradient(0deg, rgba(13,14,11,.97) 0%, rgba(13,14,11,.8) 44%, rgba(13,14,11,.1) 72%), linear-gradient(180deg, rgba(13,14,11,.6) 0%, rgba(13,14,11,0) 18%); } }

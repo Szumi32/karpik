@@ -57,7 +57,7 @@ $$('[data-search]').forEach((form) => {
 const heroVideo = $('.hero__video');
 if (heroVideo && !navigator.connection?.saveData && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const startVideo = () => {
-    heroVideo.addEventListener('playing', () => heroVideo.classList.add('is-playing'), { once: true });
+    heroVideo.addEventListener('playing', () => heroVideo.closest('[data-hero]').classList.add('is-video'), { once: true });
     heroVideo.play().catch(() => {});
   };
   if (document.readyState === 'complete') setTimeout(startVideo, 300);
