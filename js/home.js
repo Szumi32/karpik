@@ -60,7 +60,13 @@ if (heroVideo) {
   const hero = heroVideo.closest('[data-hero]');
   const fallback = () => { hero.classList.add('no-video'); heroVideo.pause(); };
   if (navigator.connection?.saveData || window.matchMedia('(prefers-reduced-motion: reduce)').matches) fallback();
-  else heroVideo.play().catch(fallback);
+  else {
+    // Na telefonach ładujemy lżejszy plik, bo to wideo jest tylko tłem.
+    const source = $('source', heroVideo);
+    if (source.dataset.small && window.matchMedia('(max-width: 760px)').matches) source.src = source.dataset.small;
+    heroVideo.load();
+    heroVideo.play().catch(fallback);
+  }
   heroVideo.addEventListener('error', fallback, true);
 }
 
