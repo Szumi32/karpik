@@ -53,15 +53,15 @@ $$('[data-search]').forEach((form) => {
   });
 });
 
-/* Wideo w tle wejścia (film bez dźwięku, zapętlony wycinek 0:13–1:10). Zdjęcie zostaje, gdy ruch jest ograniczony albo film się nie uruchomi. */
+/* Wideo w tle wejścia gra od samego początku (klatka startowa jest plakatem, więc nie ma mignięcia zdjęcia).
+   Zdjęcie Stodoły zostaje tylko wtedy, gdy ruch jest ograniczony, włączono oszczędzanie danych albo film nie może się uruchomić. */
 const heroVideo = $('.hero__video');
-if (heroVideo && !navigator.connection?.saveData && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const startVideo = () => {
-    heroVideo.addEventListener('playing', () => heroVideo.closest('[data-hero]').classList.add('is-video'), { once: true });
-    heroVideo.play().catch(() => {});
-  };
-  if (document.readyState === 'complete') setTimeout(startVideo, 300);
-  else window.addEventListener('load', () => setTimeout(startVideo, 300), { once: true });
+if (heroVideo) {
+  const hero = heroVideo.closest('[data-hero]');
+  const fallback = () => { hero.classList.add('no-video'); heroVideo.pause(); };
+  if (navigator.connection?.saveData || window.matchMedia('(prefers-reduced-motion: reduce)').matches) fallback();
+  else heroVideo.play().catch(fallback);
+  heroVideo.addEventListener('error', fallback, true);
 }
 
 /* Najbliższe wolne terminy */
