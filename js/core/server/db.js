@@ -1,6 +1,6 @@
 // Wersja statyczna: zamiast bazy danych zajęte terminy i ceny zapisane przy budowaniu strony.
 // Udaje tylko te zapytania, których używa kalendarz; nic się tu nie zapisuje.
-let DATA = {"bookings":{},"blocks":{"stodola":[["2026-11-20","2026-11-22"],["2026-12-04","2026-12-05"],["2026-12-14","2026-12-17"],["2027-01-01","2027-01-03"]],"rodzinny":[["2026-11-17","2026-11-21"],["2026-12-04","2026-12-09"],["2026-12-25","2027-01-01"]],"letniskowy":[["2026-11-20","2026-11-24"],["2026-12-12","2026-12-18"]],"drewniany":[["2026-11-29","2026-12-03"],["2026-12-18","2026-12-23"]]},"settings":{}};
+let DATA = {"bookings":{},"blocks":{"stodola":[["2026-11-20","2026-11-22"],["2026-12-04","2026-12-05"],["2026-12-14","2026-12-17"],["2027-01-01","2027-01-03"]],"rodzinny":[["2026-12-04","2026-12-09"],["2026-12-25","2027-01-01"]],"letniskowy":[["2026-11-20","2026-11-24"],["2026-12-12","2026-12-18"]],"drewniany":[["2026-11-29","2026-12-03"],["2026-12-18","2026-12-23"]]},"settings":{}};
 
 const overlapping = (ranges = [], to, from) => ranges.filter(([start, end]) => start < to && end > from).map(([start, end]) => ({ start, end }));
 
